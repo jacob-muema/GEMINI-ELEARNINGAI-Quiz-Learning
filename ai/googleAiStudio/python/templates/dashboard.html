@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center; margin-bottom: 2rem;">Your Learning Dashboard</h1>
+
+<div class="grid grid-3" style="margin-bottom: 2rem;">
+    <div class="card" style="text-align: center;">
+        <h3 style="color: var(--color-primary); font-size: 2rem; margin-bottom: 0.5rem;">
+            {{ user_data.total_quizzes }}
+        </h3>
+        <p style="color: var(--color-gray-600);">Total Quizzes Taken</p>
+    </div>
+    
+    <div class="card" style="text-align: center;">
+        <h3 style="color: var(--color-secondary); font-size: 2rem; margin-bottom: 0.5rem;">
+            {{ "%.1f"|format(overall_accuracy) }}%
+        </h3>
+        <p style="color: var(--color-gray-600);">Overall Accuracy</p>
+    </div>
+    
+    <div class="card" style="text-align: center;">
+        <h3 style="color: var(--color-warning); font-size: 2rem; margin-bottom: 0.5rem;">
+            {{ user_data.topics_progress|length }}
+        </h3>
+        <p style="color: var(--color-gray-600);">Topics Studied</p>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Topic Progress</h2>
+        </div>
+        
+        {% if user_data.topics_progress %}
+            {% for topic_id, progress in user_data.topics_progress.items() %}
+            <div style="margin-bottom: 1rem; padding: 1rem; background-color: var(--color-gray-50); border-radius: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <h4>{{ topics[topic_id].name }}</h4>
+                    <span style="font-weight: bold; color: var(--color-primary);">
+                        {{ "%.1f"|format(progress.average_score) }}%
+                    </span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--color-gray-600);">
+                    <span>{{ progress.quizzes_taken }} quizzes</span>
+                    <span>Best: {{ "%.1f"|format(progress.best_score) }}%</span>
+                </div>
+                <div style="margin-top: 0.5rem;">
+                    <a href="{{ url_for('topic_detail', topic_id=topic_id) }}" class="btn btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;">
+                        Continue Learning
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--color-gray-600); text-align: center; padding: 2rem;">
+                No progress yet. Start taking quizzes to see your progress here!
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Recent Quiz History</h2>
+        </div>
+        
+        {% if recent_quizzes %}
+            {% for quiz in recent_quizzes %}
+            <div style="margin-bottom: 1rem; padding: 1rem; border: 1px solid var(--color-gray-200); border-radius: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <h4 style="font-size: 1rem;">{{ quiz.topic_name }}</h4>
+                    <span style="font-weight: bold; color: {% if quiz.score >= 80 %}var(--color-secondary){% elif quiz.score >= 60 %}var(--color-warning){% else %}var(--color-danger){% endif %};">
+                        {{ "%.1f"|format(quiz.score) }}%
+                    </span>
+                </div>
+                <div style="font-size: 0.875rem; color: var(--color-gray-600);">
+                    {{ quiz.correct_answers }}/{{ quiz.total_questions }} correct • 
+                    {{ quiz.date[:10] }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--color-gray-600); text-align: center; padding: 2rem;">
+                No quiz history yet. Take your first quiz to get started!
+            </p>
+        {% endif %}
+    </div>
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="{{ url_for('index') }}" class="btn btn-primary">
+        Explore More Topics
+    </a>
+</div>
+{% endblock %}

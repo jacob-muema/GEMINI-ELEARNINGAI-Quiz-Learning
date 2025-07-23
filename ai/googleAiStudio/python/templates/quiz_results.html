@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 2rem;">
+    <h1>Quiz Results</h1>
+    <h2 style="color: var(--color-primary);">{{ quiz_result.topic_name }}</h2>
+</div>
+
+<div class="grid grid-2" style="margin-bottom: 2rem;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Your Score</h3>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 3rem; font-weight: bold; color: {% if quiz_result.score >= 80 %}var(--color-secondary){% elif quiz_result.score >= 60 %}var(--color-warning){% else %}var(--color-danger){% endif %};">
+                {{ "%.1f"|format(quiz_result.score) }}%
+            </div>
+            <p style="color: var(--color-gray-600);">
+                {{ quiz_result.correct_answers }} out of {{ quiz_result.total_questions }} correct
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">AI Feedback</h3>
+        </div>
+        <p style="font-style: italic; color: var(--color-gray-700);">
+            {{ feedback }}
+        </p>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h3 class="card-title">Detailed Results</h3>
+    </div>
+    
+    {% for i, result in enumerate(results) %}
+    <div style="border: 1px solid var(--color-gray-200); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; {% if result.is_correct %}background-color: rgba(16, 185, 129, 0.05);{% else %}background-color: rgba(239, 68, 68, 0.05);{% endif %}">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <span style="font-weight: bold;">Question {{ i + 1 }}:</span>
+            {% if result.is_correct %}
+                <span style="color: var(--color-secondary); font-weight: bold;">✓ Correct</span>
+            {% else %}
+                <span style="color: var(--color-danger); font-weight: bold;">✗ Incorrect</span>
+            {% endif %}
+        </div>
+        
+        <p style="margin-bottom: 1rem; font-weight: 500;">{{ result.question }}</p>
+        
+        <div style="display: grid; gap: 0.5rem; margin-bottom: 1rem;">
+            {% for option_key, option_text in result.options.items() %}
+            <div style="padding: 0.5rem; border-radius: 0.25rem; 
+                {% if option_key == result.correct_answer %}background-color: rgba(16, 185, 129, 0.1); border: 1px solid var(--color-secondary);
+                {% elif option_key == result.user_answer and not result.is_correct %}background-color: rgba(239, 68, 68, 0.1); border: 1px solid var(--color-danger);
+                {% else %}background-color: var(--color-gray-50);{% endif %}">
+                <strong>{{ option_key }}.</strong> {{ option_text }}
+                {% if option_key == result.correct_answer %}<span style="color: var(--color-secondary); font-weight: bold;"> ✓ Correct Answer</span>{% endif %}
+                {% if option_key == result.user_answer and not result.is_correct %}<span style="color: var(--color-danger); font-weight: bold;"> ✗ Your Answer</span>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div style="background-color: var(--color-gray-50); padding: 0.75rem; border-radius: 0.25rem;">
+            <strong>Explanation:</strong> {{ result.explanation }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="text-align: center; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+    <a href="{{ url_for('generate_quiz', topic_id=quiz_result.topic_id) }}" class="btn btn-primary">
+        Take Another Quiz
+    </a>
+    <a href="{{ url_for('topic_detail', topic_id=quiz_result.topic_id) }}" class="btn btn-secondary">
+        Back to Topic
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        View Dashboard
+    </a>
+</div>
+{% endblock %}

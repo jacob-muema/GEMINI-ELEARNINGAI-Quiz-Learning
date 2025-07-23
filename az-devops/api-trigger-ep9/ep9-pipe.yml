@@ -1,0 +1,33 @@
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: stage1
+
+  ## Jobs inside Stage
+  jobs:
+
+  ### CI Job
+  - job: createStorage
+    #### Steps inside the Job
+    steps:
+
+    - task: Bash@3
+      name: createS3
+      displayName: 'Create S3 bucket'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "Script Started"
+          python -m venv env
+          source env/bin/activate
+          pip install awscli
+          export AWS_ACCESS_KEY_ID="$(aws_id)"
+          export AWS_SECRET_ACCESS_KEY="$(aws_key)"
+          aws s3api create-bucket --bucket "$(bucketName)" --region "$(bucketRegion)" --create-bucket-configuration LocationConstraint="$(bucketRegion)"
+          deactivate
+
+#End

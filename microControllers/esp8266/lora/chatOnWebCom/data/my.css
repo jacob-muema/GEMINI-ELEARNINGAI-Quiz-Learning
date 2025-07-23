@@ -1,0 +1,17 @@
+#scrollable-content {
+  height: 430px;
+  overflow-y: auto;
+  margin-bottom: 0;
+  background-color: #f9e8d4;
+}
+
+#fixed-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  margin-top: 20px;
+}
+
+/*need to scale for small screens*/

@@ -1,0 +1,68 @@
+# The YAML file for GitHub Actions CI/CD EP3 with AWS
+
+name: 'GitHub-AWS CI/CD'
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'develop'
+    paths:
+      - 'github-devops/ep2-aws/cvHtml/**'
+
+jobs:
+  aws_s3_job:
+    name: 'AWS S3 Web Hosting'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+
+      - name: GIT Checkout
+        id: 'git-checkout'
+        uses: "actions/checkout@v4"
+
+      - name: CI - Compile Your App
+        id: 'ci-compile'
+        run: |
+          cd ./github-devops/ep2-aws/cvHtml
+          sudo apt-get update -y
+          sudo apt-get install apache2 -y
+          sudo systemctl start apache2
+          sudo mv /var/www/html/index.html /var/www/html/index.html.bak
+          sudo cp -r . /var/www/html/
+          sudo systemctl restart apache2
+          echo ".....Apache2 installed and custom HTML deployed....."
+
+      - name: CI - Test App & Environment
+        id: 'ci-test-app'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_KEY }}
+        run: |
+          curl localhost
+          echo ".....LocalHost test ends....."
+          cd ./github-devops/ep2-aws
+          python -m venv .env
+          source .env/bin/activate
+          pip install awscli
+          export AWS_ACCESS_KEY_ID="${{ secrets.AWS_TF_ID }}"
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_TF_KEY }}"
+          aws s3 ls s3://cv.daslearning.in/
+          deactivate
+
+      - name: CD - Website Files Upload
+        id: 'html-upload'
+        if: |
+          github.ref == 'refs/heads/main'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_KEY }}
+        run: |
+          cd ./github-devops/ep2-aws
+          python -m venv .env
+          source .env/bin/activate
+          pip install awscli
+          export AWS_ACCESS_KEY_ID="${{ secrets.AWS_TF_ID }}"
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_TF_KEY }}"
+          aws s3 sync ./cvHtml/ "s3://cv.daslearning.in"
+          deactivate

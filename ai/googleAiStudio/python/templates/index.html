@@ -1,0 +1,465 @@
+{% extends "base.html" %}
+
+{% block title %}Home - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 3rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem; color: var(--color-gray-900); background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        🎓 AI E-Learning Platform
+    </h1>
+    <p style="font-size: 1.3rem; color: var(--color-gray-600); max-width: 700px; margin: 0 auto; line-height: 1.6;">
+        Master new skills with AI-powered learning, interactive quizzes, and personalized feedback
+    </p>
+</div>
+
+<!-- AI Chat Section -->
+<div class="ai-chat-container" style="margin-bottom: 4rem; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <div class="ai-chat-card">
+        <div class="ai-chat-header">
+            <div class="ai-avatar">🤖</div>
+            <div>
+                <h2 style="margin: 0; font-size: 1.5rem; color: var(--color-gray-900);">Ask AI Anything</h2>
+                <p style="margin: 0; color: var(--color-gray-600); font-size: 1rem;">
+                    Get instant answers to your programming and learning questions!
+                </p>
+            </div>
+        </div>
+        
+        <form id="ai-chat-form" style="margin: 1.5rem 0;">
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="user-question" 
+                    placeholder="Ask me anything... e.g., 'What is machine learning?' or 'How do I learn Python?'"
+                    class="chat-input"
+                    required
+                >
+                <button 
+                    type="submit" 
+                    class="chat-submit-btn"
+                    id="ask-btn"
+                >
+                    <span class="btn-text">Ask AI</span>
+                    <span class="btn-icon">🚀</span>
+                </button>
+            </div>
+        </form>
+        
+        <div id="ai-loading" class="ai-loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <span>AI is thinking...</span>
+        </div>
+        
+        <div id="ai-response" class="ai-response" style="display: none;">
+            <div id="ai-response-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Topics Grid -->
+<div style="margin-bottom: 2rem;">
+    <h2 style="text-align: center; font-size: 2rem; margin-bottom: 2rem; color: var(--color-gray-900);">
+        🚀 Choose Your Learning Path
+    </h2>
+</div>
+
+<div class="topics-grid">
+    {% for topic_id, topic in topics.items() %}
+    <div class="topic-card">
+        <div class="topic-icon">{{ topic.icon }}</div>
+        <div class="topic-content">
+            <h3 class="topic-title">{{ topic.name }}</h3>
+            <p class="topic-description">{{ topic.description }}</p>
+            <div class="topic-difficulty">
+                <span class="difficulty-badge">{{ topic.difficulty }}</span>
+            </div>
+        </div>
+        <div class="topic-actions">
+            <a href="{{ url_for('topic_detail', topic_id=topic_id) }}" class="btn btn-primary topic-btn">
+                Start Learning
+            </a>
+            <a href="{{ url_for('study_material', topic_id=topic_id) }}" class="btn btn-secondary topic-btn">
+                Study Guide
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Features Section -->
+<div style="margin-top: 4rem; text-align: center;">
+    <div class="features-card">
+        <h2 style="margin-bottom: 2rem; font-size: 2rem; color: var(--color-gray-900);">✨ Platform Features</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">🤖</div>
+                <h4>AI-Powered Learning</h4>
+                <p>Get instant answers and personalized guidance</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎯</div>
+                <h4>Interactive Quizzes</h4>
+                <p>Test your knowledge with curated questions</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📊</div>
+                <h4>Progress Tracking</h4>
+                <p>Monitor your learning journey and achievements</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">💡</div>
+                <h4>Smart Feedback</h4>
+                <p>Receive detailed explanations and improvement tips</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* AI Chat Styles */
+.ai-chat-container {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.ai-chat-card {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(16, 185, 129, 0.05));
+    border: 2px solid var(--color-primary);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.ai-chat-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.ai-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--color-gray-200);
+    border-radius: 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.chat-submit-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.chat-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+.ai-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--color-primary);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+.ai-response {
+    margin-top: 1.5rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+    border-left: 4px solid var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ai-response .inline-code {
+    background: var(--color-gray-100);
+    color: var(--color-primary-dark);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.ai-response .list-item {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.ai-response .list-number,
+.ai-response .bullet {
+    color: var(--color-primary);
+    font-weight: bold;
+    min-width: 1.5rem;
+}
+
+/* Topics Grid */
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.topic-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-gray-100);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+.topic-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.topic-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.topic-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.topic-description {
+    color: var(--color-gray-600);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.difficulty-badge {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.topic-difficulty {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.topic-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.topic-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Features Section */
+.features-card {
+    background: linear-gradient(135deg, var(--color-gray-50), white);
+    border-radius: 2rem;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.feature-item h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.feature-item p {
+    color: var(--color-gray-600);
+    line-height: 1.5;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chat-input-container {
+        flex-direction: column;
+    }
+    
+    .topics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .topic-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+document.getElementById('ai-chat-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const questionInput = document.getElementById('user-question');
+    const question = questionInput.value.trim();
+    
+    if (!question) return;
+    
+    const askBtn = document.getElementById('ask-btn');
+    const loading = document.getElementById('ai-loading');
+    const responseDiv = document.getElementById('ai-response');
+    const responseContent = document.getElementById('ai-response-content');
+    
+    // Show loading state
+    askBtn.disabled = true;
+    askBtn.querySelector('.btn-text').textContent = 'Thinking...';
+    loading.style.display = 'flex';
+    responseDiv.style.display = 'none';
+    
+    try {
+        const response = await fetch('/ask_ai', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `user_question=${encodeURIComponent(question)}`
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            responseContent.innerHTML = `
+                <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-gray-200);">
+                    <strong style="color: var(--color-primary); font-size: 1.1rem;">Your Question:</strong>
+                    <p style="margin: 0.5rem 0; font-style: italic; color: var(--color-gray-700);">${data.question}</p>
+                </div>
+                <div>
+                    <strong style="color: var(--color-primary); font-size: 1.1rem;">AI Answer:</strong>
+                    <div style="margin-top: 1rem; line-height: 1.6;">${data.answer}</div>
+                </div>
+            `;
+            responseDiv.style.display = 'block';
+            questionInput.value = ''; // Clear the input
+        } else {
+            responseContent.innerHTML = `
+                <div style="color: var(--color-danger); padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 0.5rem;">
+                    <strong>Error:</strong> ${data.error}
+                </div>
+            `;
+            responseDiv.style.display = 'block';
+        }
+    } catch (error) {
+        responseContent.innerHTML = `
+            <div style="color: var(--color-danger); padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 0.5rem;">
+                <strong>Error:</strong> Failed to get response. Please try again.
+            </div>
+        `;
+        responseDiv.style.display = 'block';
+    } finally {
+        // Reset button state
+        askBtn.disabled = false;
+        askBtn.querySelector('.btn-text').textContent = 'Ask AI';
+        loading.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

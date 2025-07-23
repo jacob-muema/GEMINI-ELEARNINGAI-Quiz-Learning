@@ -1,0 +1,75 @@
+trigger:
+  branches:
+    include:
+    - main
+    - develop
+  paths:
+    include:
+    - az-devops/aws-ep8/*
+    exclude:
+    - az-devops/aws-ep8/README.md
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  isMain: true
+
+# Stages 
+stages:
+- stage: stage1
+
+  ## Jobs inside Stage
+  jobs:
+
+  ### CI Job
+  - job: createStorage
+    #### Steps inside the Job
+    steps:
+
+    - task: Bash@3
+      name: tfplan
+      displayName: 'Terraform Plan'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd ./az-devops/aws-ep8
+          export AWS_ACCESS_KEY_ID="$(aws_id)"
+          export AWS_SECRET_ACCESS_KEY="$(aws_key)"
+          terraform init
+          terraform plan
+
+    - task: Bash@3
+      name: tfapply
+      displayName: 'Terraform Apply'
+      condition: eq(variables['Build.SourceBranchName'], 'main')
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd ./az-devops/aws-ep8
+          export AWS_ACCESS_KEY_ID="$(aws_id)"
+          export AWS_SECRET_ACCESS_KEY="$(aws_key)"
+          terraform init
+          terraform apply --auto-approve
+
+  # CD Job
+  - job: uploadJob
+    dependsOn: createStorage
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    #### Steps inside the Job
+    steps:
+
+    - task: Bash@3
+      name: uploadToS3
+      displayName: 'Upload files to S3 bucket'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd ./az-devops/aws-ep8
+          python -m venv env
+          source env/bin/activate
+          pip install awscli
+          export AWS_ACCESS_KEY_ID="$(aws_id)"
+          export AWS_SECRET_ACCESS_KEY="$(aws_key)"
+          aws s3 sync ./data s3://dl-azdevops-ep8
+          deactivate

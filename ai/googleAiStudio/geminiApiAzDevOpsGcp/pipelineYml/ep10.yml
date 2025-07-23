@@ -1,0 +1,54 @@
+# The fun way to use AI with DevOps
+trigger:
+  - none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# At this step, we will get the dynamic code from AI
+#export GOOGLE_APPLICATION_CREDENTIALS="$(googleCred)"
+- task: Bash@3
+  name: getTfCodeFromGemini
+  displayName: 'Get Terraform Code from Gemini API'
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd ./youtube/ep10/ # Change to your directory where you want to run your code
+      echo "$(project_id)"
+      echo "$(userPrompt)"
+      pip install -q -U google-genai
+      export GEMINI_API_KEY="$(geminiKey)"
+      python ./scripts/geminiApi.py "$(project_id)" "$(userPrompt)"
+      echo "........................."
+      ls
+
+- task: DownloadSecureFile@1
+  name: gcpJson
+  displayName: 'Download GCP Key file'
+  inputs:
+    secureFile: 'key.json'
+
+- task: Bash@3
+  name: runTerraform
+  displayName: 'Run the Terraform Code'
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd ./youtube/ep10/
+      export GOOGLE_APPLICATION_CREDENTIALS="$(gcpJson.secureFilePath)"
+      terraform init
+      terraform apply --auto-approve
+
+- task: Bash@3
+  name: uploadTf
+  displayName: 'Upload tf state & code to bucket'
+  continueOnError: true
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd ./youtube/ep10/
+      pip install --upgrade google-cloud-storage
+      export GOOGLE_APPLICATION_CREDENTIALS="$(gcpJson.secureFilePath)"
+      python ./scripts/gcsUpload.py "$(bucketName)" "$(Build.BuildId)"

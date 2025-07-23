@@ -1,0 +1,866 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz: {{ quiz.topic_name }} - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="text-align: center; margin-bottom: 0.5rem;" id="quiz-title">Loading Quiz...</h1>
+    <p style="text-align: center; color: var(--color-gray-600);">
+        Answer all questions and click submit to see your results
+    </p>
+</div>
+
+<div id="error-message" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--color-danger); color: var(--color-danger); padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: center;">
+    <strong id="error-text"></strong>
+</div>
+
+<form id="quiz-form" style="display: none;">
+    <div class="grid" style="gap: 2rem;" id="questions-container">
+        <!-- Questions will be generated here by JavaScript -->
+    </div>
+
+    <!-- Progress indicator -->
+    <div class="progress-section">
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <p class="progress-text">
+            <span id="answered-count">0</span> of <span id="total-count">5</span> questions answered
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary" id="submit-btn"
+                style="font-size: 1.1rem; padding: 1rem 2rem;" disabled>
+            Submit Quiz 📝
+        </button>
+        <p class="submit-message" id="submit-message">
+            Please answer all questions to submit
+        </p>
+    </div>
+</form>
+
+<!-- Results Section (hidden initially) -->
+<div id="results-section" style="display: none;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Quiz Results</h1>
+        <h2 style="color: var(--color-primary);" id="results-topic"></h2>
+    </div>
+
+    <!-- Score Summary -->
+    <div class="card" style="text-align: center; margin-bottom: 2rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;" id="score-emoji">🎉</div>
+        <div style="font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem;" id="score-percentage">0%</div>
+        <p style="font-size: 1.2rem; color: var(--color-gray-600);" id="score-text">
+            0 out of 5 questions answered correctly
+        </p>
+    </div>
+
+    <!-- Detailed Results -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+            <h2 class="card-title">📋 Detailed Results</h2>
+        </div>
+        <div id="detailed-results">
+            <!-- Results will be populated here -->
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button onclick="restartQuiz()" class="btn btn-primary">Take Quiz Again</button>
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.question-card {
+    border-left: 4px solid var(--color-gray-200);
+    transition: all 0.3s ease;
+}
+
+.question-card.answered {
+    border-left-color: var(--color-secondary);
+    background: rgba(16, 185, 129, 0.02);
+}
+
+.options-container {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 2px solid var(--color-gray-200);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+    position: relative;
+}
+
+.option-label:hover {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.03);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+}
+
+.option-label.selected {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.08);
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+.option-radio {
+    display: none;
+}
+
+.radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-gray-300);
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.option-radio:checked + .radio-custom {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+.option-radio:checked + .radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.option-content {
+    flex: 1;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.question-status {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-gray-500);
+}
+
+.question-status.answered {
+    color: var(--color-secondary);
+    font-weight: 500;
+}
+
+.question-status.answered::before {
+    content: "✓";
+    font-weight: bold;
+    color: var(--color-secondary);
+}
+
+.progress-section {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.progress-bar-container {
+    background: var(--color-gray-200);
+    height: 8px;
+    border-radius: 4px;
+    max-width: 400px;
+    margin: 0 auto 1rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.progress-text {
+    color: var(--color-gray-600);
+    font-weight: 500;
+    margin: 0;
+}
+
+.submit-message {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+}
+
+#submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--color-gray-400);
+}
+
+#submit-btn:not(:disabled) {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+#submit-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+// ALL QUIZ DATA IS HERE - NO BACKEND NEEDED!
+const QUIZ_DATA = {
+    python: {
+        name: "Python Programming",
+        questions: [
+            {
+                question: "What is the correct way to create a variable in Python?",
+                options: {
+                    A: "var x = 5",
+                    B: "x = 5",
+                    C: "int x = 5",
+                    D: "create x = 5"
+                },
+                correct: "B",
+                explanation: "In Python, you create variables by simply assigning a value using the = operator."
+            },
+            {
+                question: "Which data type is used to store text in Python?",
+                options: {
+                    A: "int",
+                    B: "float",
+                    C: "str",
+                    D: "bool"
+                },
+                correct: "C",
+                explanation: "The 'str' data type is used to store text/string values in Python."
+            },
+            {
+                question: "What does the len() function do?",
+                options: {
+                    A: "Returns the length of an object",
+                    B: "Creates a new list",
+                    C: "Converts to integer",
+                    D: "Prints to console"
+                },
+                correct: "A",
+                explanation: "The len() function returns the number of items in an object like a string, list, or tuple."
+            },
+            {
+                question: "Which symbol is used for comments in Python?",
+                options: {
+                    A: "//",
+                    B: "/* */",
+                    C: "#",
+                    D: "--"
+                },
+                correct: "C",
+                explanation: "The # symbol is used to create single-line comments in Python."
+            },
+            {
+                question: "What is the output of print(type(5.0))?",
+                options: {
+                    A: "<class 'int'>",
+                    B: "<class 'float'>",
+                    C: "<class 'str'>",
+                    D: "<class 'number'>"
+                },
+                correct: "B",
+                explanation: "5.0 is a floating-point number, so its type is 'float'."
+            }
+        ]
+    },
+    javascript: {
+        name: "JavaScript Development",
+        questions: [
+            {
+                question: "How do you declare a variable in JavaScript?",
+                options: {
+                    A: "var x = 5",
+                    B: "variable x = 5",
+                    C: "v x = 5",
+                    D: "declare x = 5"
+                },
+                correct: "A",
+                explanation: "In JavaScript, you can declare variables using 'var', 'let', or 'const'."
+            },
+            {
+                question: "Which method is used to add an element to the end of an array?",
+                options: {
+                    A: "add()",
+                    B: "append()",
+                    C: "push()",
+                    D: "insert()"
+                },
+                correct: "C",
+                explanation: "The push() method adds one or more elements to the end of an array."
+            },
+            {
+                question: "What is the correct way to write a JavaScript function?",
+                options: {
+                    A: "function myFunction() {}",
+                    B: "def myFunction() {}",
+                    C: "create myFunction() {}",
+                    D: "func myFunction() {}"
+                },
+                correct: "A",
+                explanation: "JavaScript functions are declared using the 'function' keyword."
+            },
+            {
+                question: "Which operator is used for strict equality in JavaScript?",
+                options: {
+                    A: "=",
+                    B: "==",
+                    C: "===",
+                    D: "!="
+                },
+                correct: "C",
+                explanation: "The === operator checks for strict equality (same value and same type)."
+            },
+            {
+                question: "How do you write a single-line comment in JavaScript?",
+                options: {
+                    A: "# This is a comment",
+                    B: "// This is a comment",
+                    C: "<!-- This is a comment -->",
+                    D: "/* This is a comment */"
+                },
+                correct: "B",
+                explanation: "Single-line comments in JavaScript start with //."
+            }
+        ]
+    },
+    data_science: {
+        name: "Data Science",
+        questions: [
+            {
+                question: "What does CSV stand for?",
+                options: {
+                    A: "Computer Separated Values",
+                    B: "Comma Separated Values",
+                    C: "Character Separated Values",
+                    D: "Code Separated Values"
+                },
+                correct: "B",
+                explanation: "CSV stands for Comma Separated Values, a common data format."
+            },
+            {
+                question: "Which Python library is commonly used for data manipulation?",
+                options: {
+                    A: "NumPy",
+                    B: "Pandas",
+                    C: "Matplotlib",
+                    D: "Scikit-learn"
+                },
+                correct: "B",
+                explanation: "Pandas is the most popular Python library for data manipulation and analysis."
+            },
+            {
+                question: "What is the purpose of data visualization?",
+                options: {
+                    A: "To make data look pretty",
+                    B: "To understand patterns and insights in data",
+                    C: "To increase file size",
+                    D: "To slow down analysis"
+                },
+                correct: "B",
+                explanation: "Data visualization helps us understand patterns, trends, and insights in data."
+            },
+            {
+                question: "What is machine learning?",
+                options: {
+                    A: "Teaching computers to learn from data",
+                    B: "A type of hardware",
+                    C: "A programming language",
+                    D: "A database system"
+                },
+                correct: "A",
+                explanation: "Machine learning is a method of teaching computers to learn patterns from data."
+            },
+            {
+                question: "Which measure represents the middle value in a dataset?",
+                options: {
+                    A: "Mean",
+                    B: "Mode",
+                    C: "Median",
+                    D: "Range"
+                },
+                correct: "C",
+                explanation: "The median is the middle value when data is arranged in order."
+            }
+        ]
+    },
+    web_development: {
+        name: "Web Development",
+        questions: [
+            {
+                question: "What does HTML stand for?",
+                options: {
+                    A: "Hyper Text Markup Language",
+                    B: "High Tech Modern Language",
+                    C: "Home Tool Markup Language",
+                    D: "Hyperlink and Text Markup Language"
+                },
+                correct: "A",
+                explanation: "HTML stands for Hyper Text Markup Language, used to create web pages."
+            },
+            {
+                question: "Which CSS property is used to change text color?",
+                options: {
+                    A: "text-color",
+                    B: "font-color",
+                    C: "color",
+                    D: "text-style"
+                },
+                correct: "C",
+                explanation: "The 'color' property in CSS is used to set the text color."
+            },
+            {
+                question: "What is the purpose of CSS?",
+                options: {
+                    A: "To add interactivity to web pages",
+                    B: "To style and layout web pages",
+                    C: "To create databases",
+                    D: "To handle server requests"
+                },
+                correct: "B",
+                explanation: "CSS (Cascading Style Sheets) is used to style and layout web pages."
+            },
+            {
+                question: "Which HTML tag is used to create a hyperlink?",
+                options: {
+                    A: "<link>",
+                    B: "<a>",
+                    C: "<href>",
+                    D: "<url>"
+                },
+                correct: "B",
+                explanation: "The <a> tag with the href attribute is used to create hyperlinks."
+            },
+            {
+                question: "What is responsive web design?",
+                options: {
+                    A: "Fast loading websites",
+                    B: "Websites that work on different screen sizes",
+                    C: "Websites with animations",
+                    D: "Websites that respond to user input"
+                },
+                correct: "B",
+                explanation: "Responsive web design ensures websites work well on different devices and screen sizes."
+            }
+        ]
+    },
+    devops: {
+        name: "DevOps Engineering",
+        questions: [
+            {
+                question: "What does CI/CD stand for?",
+                options: {
+                    A: "Computer Integration/Computer Deployment",
+                    B: "Continuous Integration/Continuous Deployment",
+                    C: "Code Integration/Code Deployment",
+                    D: "Central Integration/Central Deployment"
+                },
+                correct: "B",
+                explanation: "CI/CD stands for Continuous Integration/Continuous Deployment."
+            },
+            {
+                question: "What is Docker used for?",
+                options: {
+                    A: "Database management",
+                    B: "Containerization of applications",
+                    C: "Web development",
+                    D: "Network security"
+                },
+                correct: "B",
+                explanation: "Docker is a platform for containerizing applications, making them portable and scalable."
+            },
+            {
+                question: "What is the main benefit of version control systems like Git?",
+                options: {
+                    A: "Faster code execution",
+                    B: "Track changes and collaborate on code",
+                    C: "Automatic bug fixing",
+                    D: "Better user interfaces"
+                },
+                correct: "B",
+                explanation: "Version control systems help track changes in code and enable team collaboration."
+            },
+            {
+                question: "What is Infrastructure as Code (IaC)?",
+                options: {
+                    A: "Writing code for mobile apps",
+                    B: "Managing infrastructure through code",
+                    C: "Creating user interfaces",
+                    D: "Database programming"
+                },
+                correct: "B",
+                explanation: "IaC is the practice of managing and provisioning infrastructure through code."
+            },
+            {
+                question: "What is the purpose of monitoring in DevOps?",
+                options: {
+                    A: "To watch employees work",
+                    B: "To track application performance and health",
+                    C: "To count lines of code",
+                    D: "To manage user accounts"
+                },
+                correct: "B",
+                explanation: "Monitoring helps track application performance, health, and identify issues early."
+            }
+        ]
+    }
+};
+
+// Global variables
+let currentTopic = '';
+let currentQuestions = [];
+let userAnswers = {};
+let answeredQuestions = new Set();
+
+// Initialize quiz when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== QUIZ INITIALIZATION ===');
+    
+    // Get topic from URL
+    const urlPath = window.location.pathname;
+    const topicMatch = urlPath.match(/\/generate_quiz\/(.+)/);
+    
+    if (topicMatch) {
+        currentTopic = topicMatch[1];
+        console.log('Topic detected:', currentTopic);
+        
+        if (QUIZ_DATA[currentTopic]) {
+            initializeQuiz(currentTopic);
+        } else {
+            showError(`Topic "${currentTopic}" not found. Available topics: ${Object.keys(QUIZ_DATA).join(', ')}`);
+        }
+    } else {
+        showError('No topic specified in URL');
+    }
+});
+
+function initializeQuiz(topic) {
+    console.log('Initializing quiz for:', topic);
+    
+    const quizData = QUIZ_DATA[topic];
+    currentQuestions = quizData.questions;
+    
+    // Update title
+    document.getElementById('quiz-title').textContent = `${quizData.name} Quiz`;
+    document.getElementById('total-count').textContent = currentQuestions.length;
+    
+    // Generate questions HTML
+    generateQuestionsHTML();
+    
+    // Show quiz form
+    document.getElementById('quiz-form').style.display = 'block';
+    
+    // Setup event listeners
+    setupEventListeners();
+    
+    console.log('Quiz initialized with', currentQuestions.length, 'questions');
+}
+
+function generateQuestionsHTML() {
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+    
+    currentQuestions.forEach((question, index) => {
+        const questionHTML = `
+            <div class="card question-card" data-question="${index}">
+                <div class="card-header">
+                    <h3 class="card-title">Question ${index + 1}</h3>
+                </div>
+                <p style="margin-bottom: 1.5rem; font-weight: 500;">${question.question}</p>
+                
+                <div class="options-container">
+                    ${Object.entries(question.options).map(([key, value]) => `
+                        <label class="option-label" for="q${index}_${key}">
+                            <input type="radio" 
+                                   id="q${index}_${key}"
+                                   name="question_${index}" 
+                                   value="${key}" 
+                                   required 
+                                   class="option-radio">
+                            <span class="radio-custom"></span>
+                            <span class="option-content">
+                                <strong>${key}.</strong> ${value}
+                            </span>
+                        </label>
+                    `).join('')}
+                </div>
+
+                <div class="question-status" id="status-${index}">
+                    <span class="status-text">Please select an answer</span>
+                </div>
+            </div>
+        `;
+        container.innerHTML += questionHTML;
+    });
+}
+
+function setupEventListeners() {
+    // Radio button change events
+    document.querySelectorAll('.option-radio').forEach(radio => {
+        radio.addEventListener('change', function() {
+            console.log('=== RADIO CHANGE EVENT ===');
+            console.log('Radio clicked:', this.id, 'Value:', this.value);
+            
+            // Get question number from name attribute
+            const questionNumber = this.name.replace('question_', '');
+            console.log('Question number:', questionNumber);
+            
+            // Store user answer
+            userAnswers[questionNumber] = this.value;
+            console.log('User answers so far:', userAnswers);
+            
+            // Update visual feedback
+            updateQuestionVisuals(questionNumber, this.value);
+            
+            // Update progress
+            updateProgress();
+        });
+    });
+    
+    // Form submission
+    document.getElementById('quiz-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('=== FORM SUBMISSION ===');
+        
+        // Check if all questions answered
+        if (Object.keys(userAnswers).length !== currentQuestions.length) {
+            const missing = currentQuestions.length - Object.keys(userAnswers).length;
+            showError(`Please answer all questions. You have ${missing} questions remaining.`);
+            return;
+        }
+        
+        // Calculate and show results
+        calculateAndShowResults();
+    });
+}
+
+function updateQuestionVisuals(questionNumber, selectedValue) {
+    console.log('Updating visuals for question', questionNumber, 'with answer', selectedValue);
+    
+    // Find question card
+    const questionCard = document.querySelector(`[data-question="${questionNumber}"]`);
+    if (!questionCard) {
+        console.error('Question card not found for question', questionNumber);
+        return;
+    }
+    
+    // Mark question as answered
+    answeredQuestions.add(questionNumber);
+    questionCard.classList.add('answered');
+    
+    // Update status text
+    const statusElement = questionCard.querySelector('.question-status');
+    if (statusElement) {
+        statusElement.classList.add('answered');
+        const statusText = statusElement.querySelector('.status-text');
+        if (statusText) {
+            statusText.textContent = `Answer: ${selectedValue}`;
+        }
+    }
+    
+    // Remove selected class from all options in this question
+    const allOptions = questionCard.querySelectorAll('.option-label');
+    allOptions.forEach(label => label.classList.remove('selected'));
+    
+    // Add selected class to chosen option
+    const selectedOption = questionCard.querySelector(`#q${questionNumber}_${selectedValue}`);
+    if (selectedOption) {
+        const selectedLabel = selectedOption.closest('.option-label');
+        if (selectedLabel) {
+            selectedLabel.classList.add('selected');
+        }
+    }
+    
+    console.log('Visual update completed for question', questionNumber);
+}
+
+function updateProgress() {
+    const answered = answeredQuestions.size;
+    const total = currentQuestions.length;
+    const percentage = (answered / total) * 100;
+    
+    console.log('Progress update:', answered, '/', total, '=', percentage + '%');
+    
+    // Update progress bar
+    document.getElementById('progress-bar').style.width = percentage + '%';
+    document.getElementById('answered-count').textContent = answered;
+    
+    // Update submit button
+    const submitBtn = document.getElementById('submit-btn');
+    const submitMessage = document.getElementById('submit-message');
+    
+    if (answered === total) {
+        submitBtn.disabled = false;
+        submitMessage.textContent = 'All questions answered! Ready to submit.';
+        submitMessage.style.color = 'var(--color-secondary)';
+    } else {
+        submitBtn.disabled = true;
+        const remaining = total - answered;
+        submitMessage.textContent = `Please answer ${remaining} more question${remaining === 1 ? '' : 's'} to submit`;
+        submitMessage.style.color = 'var(--color-gray-500)';
+    }
+}
+
+function calculateAndShowResults() {
+    console.log('=== CALCULATING RESULTS ===');
+    console.log('User answers:', userAnswers);
+    
+    let correctCount = 0;
+    const results = [];
+    
+    currentQuestions.forEach((question, index) => {
+        const userAnswer = userAnswers[index.toString()];
+        const isCorrect = userAnswer === question.correct;
+        
+        if (isCorrect) correctCount++;
+        
+        results.push({
+            question: question.question,
+            userAnswer: userAnswer,
+            correctAnswer: question.correct,
+            isCorrect: isCorrect,
+            explanation: question.explanation,
+            options: question.options
+        });
+        
+        console.log(`Question ${index + 1}: ${isCorrect ? 'CORRECT' : 'WRONG'} (${userAnswer} vs ${question.correct})`);
+    });
+    
+    const score = (correctCount / currentQuestions.length) * 100;
+    console.log('Final score:', score + '%', `(${correctCount}/${currentQuestions.length})`);
+    
+    // Show results
+    showResults(score, correctCount, results);
+}
+
+function showResults(score, correctCount, results) {
+    // Hide quiz form
+    document.getElementById('quiz-form').style.display = 'none';
+    
+    // Show results section
+    document.getElementById('results-section').style.display = 'block';
+    
+    // Update results data
+    document.getElementById('results-topic').textContent = QUIZ_DATA[currentTopic].name;
+    document.getElementById('score-percentage').textContent = score.toFixed(1) + '%';
+    document.getElementById('score-text').textContent = `${correctCount} out of ${currentQuestions.length} questions answered correctly`;
+    
+    // Update score emoji and color
+    const scoreEmoji = document.getElementById('score-emoji');
+    const scorePercentage = document.getElementById('score-percentage');
+    
+    if (score >= 80) {
+        scoreEmoji.textContent = '🎉';
+        scorePercentage.style.color = 'var(--color-secondary)';
+    } else if (score >= 60) {
+        scoreEmoji.textContent = '👍';
+        scorePercentage.style.color = 'var(--color-warning)';
+    } else {
+        scoreEmoji.textContent = '📚';
+        scorePercentage.style.color = 'var(--color-danger)';
+    }
+    
+    // Generate detailed results
+    const detailedResults = document.getElementById('detailed-results');
+    detailedResults.innerHTML = results.map((result, index) => `
+        <div style="border: 1px solid var(--color-gray-200); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem; 
+                    ${result.isCorrect ? 'border-left: 4px solid var(--color-secondary);' : 'border-left: 4px solid var(--color-danger);'}">
+            
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem;">${result.isCorrect ? '✅' : '❌'}</span>
+                <strong>Question ${index + 1}</strong>
+            </div>
+            
+            <p style="font-weight: 500; margin-bottom: 1rem;">${result.question}</p>
+            
+            <div style="display: grid; gap: 0.5rem; margin-bottom: 1rem;">
+                ${Object.entries(result.options).map(([key, value]) => `
+                    <div style="padding: 0.5rem; border-radius: 0.25rem; 
+                                ${key === result.correctAnswer ? 'background-color: rgba(16, 185, 129, 0.1); border: 1px solid var(--color-secondary);' : 
+                                  key === result.userAnswer && !result.isCorrect ? 'background-color: rgba(239, 68, 68, 0.1); border: 1px solid var(--color-danger);' : 
+                                  'background-color: var(--color-gray-50);'}">
+                        <strong>${key}.</strong> ${value}
+                        ${key === result.correctAnswer ? '<span style="color: var(--color-secondary); font-weight: bold;"> ✓ Correct Answer</span>' : ''}
+                        ${key === result.userAnswer && !result.isCorrect ? '<span style="color: var(--color-danger); font-weight: bold;"> ✗ Your Answer</span>' : ''}
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div style="background-color: var(--color-gray-50); padding: 0.75rem; border-radius: 0.25rem;">
+                <strong>Explanation:</strong> ${result.explanation}
+            </div>
+        </div>
+    `).join('');
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+function showError(message) {
+    document.getElementById('error-text').textContent = message;
+    document.getElementById('error-message').style.display = 'block';
+    console.error('Quiz Error:', message);
+}
+
+function restartQuiz() {
+    // Reset all variables
+    userAnswers = {};
+    answeredQuestions = new Set();
+    
+    // Hide results, show quiz
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('quiz-form').style.display = 'block';
+    
+    // Reset form
+    document.getElementById('quiz-form').reset();
+    
+    // Reset visual states
+    document.querySelectorAll('.question-card').forEach(card => {
+        card.classList.remove('answered');
+    });
+    
+    document.querySelectorAll('.question-status').forEach(status => {
+        status.classList.remove('answered');
+        status.querySelector('.status-text').textContent = 'Please select an answer';
+    });
+    
+    document.querySelectorAll('.option-label').forEach(label => {
+        label.classList.remove('selected');
+    });
+    
+    // Reset progress
+    updateProgress();
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+</script>
+{% endblock %}

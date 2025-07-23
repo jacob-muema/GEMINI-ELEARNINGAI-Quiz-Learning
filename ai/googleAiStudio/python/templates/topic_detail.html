@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.name }} - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{{ url_for('index') }}" style="color: var(--color-primary); text-decoration: none;">
+        ← Back to Topics
+    </a>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">{{ topic.name }}</h1>
+        </div>
+        <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+            {{ topic.description }}
+        </p>
+        <div style="margin-bottom: 1.5rem;">
+            <span style="background-color: var(--color-gray-100); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; color: var(--color-gray-700);">
+                {{ topic.difficulty }}
+            </span>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="{{ url_for('generate_quiz', topic_id=topic_id) }}" class="btn btn-primary">
+                🎯 Take Quiz
+            </a>
+            <a href="{{ url_for('study_material', topic_id=topic_id) }}" class="btn btn-secondary">
+                📚 Study Material
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Your Progress</h2>
+        </div>
+        <div style="display: grid; gap: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: var(--color-gray-50); border-radius: 0.5rem;">
+                <span>Quizzes Taken:</span>
+                <strong>{{ progress.quizzes_taken }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: var(--color-gray-50); border-radius: 0.5rem;">
+                <span>Average Score:</span>
+                <strong>{{ "%.1f"|format(progress.average_score) }}%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: var(--color-gray-50); border-radius: 0.5rem;">
+                <span>Best Score:</span>
+                <strong>{{ "%.1f"|format(progress.best_score) }}%</strong>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

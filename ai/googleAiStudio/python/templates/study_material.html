@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Study Material: {{ topic.name }} - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{{ url_for('topic_detail', topic_id=topic_id) }}" style="color: var(--color-primary); text-decoration: none;">
+        ← Back to {{ topic.name }}
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">📚 Study Material: {{ topic.name }}</h1>
+    </div>
+    
+    <div style="line-height: 1.8; color: var(--color-gray-700);">
+    <style>
+        .study-content h1 {
+            color: var(--color-primary);
+            font-size: 2rem;
+            margin: 2rem 0 1rem 0;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .study-content h2 {
+            color: var(--color-primary-dark);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+            border-left: 4px solid var(--color-primary);
+            padding-left: 1rem;
+        }
+        
+        .study-content h3 {
+            color: var(--color-gray-800);
+            font-size: 1.25rem;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+        
+        .study-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .study-content ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .study-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .study-content .code-block {
+            background-color: var(--color-gray-900);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .study-content .inline-code {
+            background-color: var(--color-gray-100);
+            color: var(--color-primary-dark);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .study-content strong {
+            color: var(--color-gray-900);
+            font-weight: 600;
+        }
+        
+        .study-content em {
+            color: var(--color-gray-700);
+            font-style: italic;
+        }
+    </style>
+    
+    <div class="study-content">
+        {{ content|safe }}
+    </div>
+</div>
+    
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-gray-200); text-align: center;">
+        <a href="{{ url_for('generate_quiz', topic_id=topic_id) }}" class="btn btn-primary">
+            🎯 Test Your Knowledge
+        </a>
+    </div>
+</div>
+{% endblock %}

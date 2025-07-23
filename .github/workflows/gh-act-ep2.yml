@@ -1,0 +1,63 @@
+# The YAML file for GitHub Actions EP2 with AWS & Terraform
+
+name: 'GitHub-AWS API Trigger'
+
+on:
+  workflow_dispatch:
+    inputs:
+      bucket:
+        description: "The name of the bucket"
+        required: true
+        #default: 'daslearning.in'
+      region:
+        description: "The region of the bucket"
+        required: true
+        #default: 'ap-south-1'
+
+jobs:
+  aws_s3_job:
+    name: 'AWS S3 Web Hosting'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+
+      - name: GIT Checkout
+        id: 'git-checkout'
+        uses: "actions/checkout@v4"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.0"
+
+      - name: Create Bucket using Terraform
+        id: 'tf-s3'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_KEY }}
+        run: |
+          cd ./github-devops/ep2-aws/tf
+          echo "${{ inputs.bucket }}"
+          echo "${{ inputs.region }}"
+          echo "...................."
+          export TF_VAR_aws_region="${{ inputs.region }}"
+          export TF_VAR_name="${{ inputs.bucket }}"
+          terraform init
+          terraform plan
+          terraform apply --auto-approve
+
+      - name: Website Files Upload
+        id: 'html-upload'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_KEY }}
+        run: |
+          cd ./github-devops/ep2-aws
+          python -m venv .env
+          source .env/bin/activate
+          pip install awscli
+          export AWS_ACCESS_KEY_ID="${{ secrets.AWS_TF_ID }}"
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_TF_KEY }}"
+          aws s3 sync ./cvHtml/ s3://"${{ inputs.bucket }}"
+          aws s3 cp ./tf/terraform.tfstate "s3://daslearning-tf/youtube/git-devops/$GITHUB_RUN_ID/terraform.tfstate"
+          deactivate

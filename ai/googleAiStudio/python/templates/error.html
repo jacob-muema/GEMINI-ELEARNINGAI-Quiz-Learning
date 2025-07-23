@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Error - AI E-Learning Platform{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 3rem;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+    <h1 style="margin-bottom: 1rem;">Oops! Something went wrong</h1>
+    <p style="color: var(--color-gray-600); margin-bottom: 2rem;">{{ message }}</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">
+        Go Back Home
+    </a>
+</div>
+{% endblock %}

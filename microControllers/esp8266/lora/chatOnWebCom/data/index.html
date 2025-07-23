@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DIY-Try | Chat with LoRa</title>
+    <link rel="stylesheet" href="w3.css">
+    <link rel="stylesheet" href="my.css">
+  </head>
+
+  <body>
+    <div>
+      <h3>Let's chat with other device via LoRa | DIY-Try </h3>
+      <p class="w3-small w3-pale-green">
+        For more content like this or to connect me, please visit > 
+        <a href="https://daslearning.in/">DasLearning.in</a>
+      </p>
+    </div>
+    <div class="w3-card w3-border w3-white w3-round-large">
+      <div class="w3-container w3-padding" id="scrollable-content">
+        <!-- Chats will be added here -->
+      </div>
+      <div class="w3-row w3-padding" id="fixed-buttons">
+        <div class="w3-col s10">
+          <input id="msgInput" class="w3-input w3-border" type="text">
+        </div>
+        <div class="w3-col s2">
+          <button id="sendBtn" type="button" class="w3-button w3-green w3-round-large w3-margin-left">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two chat divs for incoming and out going -->
+    <div id="inChat" class="w3-panel w3-blue w3-round-xlarge w3-hide">
+      <!-- p tage will be added here-->
+    </div>
+    <div id="outChat" class="w3-panel w3-green w3-round-xlarge w3-hide">
+      <!-- p tage will be added here-->
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+
+</html>

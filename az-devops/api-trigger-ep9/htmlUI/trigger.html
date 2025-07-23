@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="DasLearning | API Trigger for Azure DevOps Pipelines">
+
+    <title>DasLearning | API Trigger for Azure DevOps Pipelines</title>
+    <!-- The CSS links -->
+    <link rel='stylesheet' href='./assets/bootstrap.css'>
+  </head>
+
+  <body>
+    <div class="container border border-primary rounded mt-2 p-2">
+      <p class="text-muted">Please select enter / select details to deploy your bucket</p>
+      <form id="bucketForm">
+        <label for="bucketName" class="form-label">Bucket Name (Should be globally unique)</label>
+        <input required type="text" class="form-control mb-1" id="bucketName" placeholder="bucket name">
+        <label for="region" class="form-label">Choose your bucket location</label>
+        <select id="region" class="form-select mb-1" aria-label="Default select example">
+          <option selected value="ap-south-1">Mumbai</option>
+          <option value="ap-southeast-1">Singapore</option>
+          <option value="ap-northeast-1">Tokyo</option>
+        </select>
+        <button id="formSubmit" type="button" class="btn btn-primary" onclick="apiCall()">Submit</button>
+      </form>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Check existing Run
+      </button>
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Check Run with ID</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="checkRunForm">
+                <label for="runId" class="form-label">Enter your run ID</label>
+                <input required type="text" class="form-control mb-1" id="runId" placeholder="run id">
+                <p id="runStatus" class="visually-hidden">Run status</p>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="checkRunId()">Check Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/bootstrap.js"></script>
+    <script src="./assets/main.js"></script>
+  </body>
+</html>
