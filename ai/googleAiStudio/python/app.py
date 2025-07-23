@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Change this to a secure secret key
 
 # Configure the Generative AI API (only for AI chat, NOT for quizzes)
-genai.configure(api_key="AIzaSyB_P_P2n9EoKrj4IUvGqgm5uenMcCP6Lug")
+genai.configure(api_key="")
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 # In-memory storage (in production, use a proper database)

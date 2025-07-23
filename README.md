@@ -4,8 +4,13 @@ An interactive e-learning platform powered by Google's Gemini AI that offers qui
 
 ## 🎥 Video Demo
 
-A complete video demonstration of the platform is available at:
-`/home/jacob-muema/Downloads/GEMINI-API1-main/Screencast from 2025-07-23 13-52-18.webm`
+Watch the complete demonstration of the AI E-Learning Platform:
+
+[![AI E-Learning Platform Demo](https://img.youtube.com/vi/gdsTxD2B_d0/maxresdefault.jpg)](https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ)
+
+**🎬 [Watch on YouTube: Building an AI-Powered Learning Platform with Flask & Google Gemini](https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ)**
+
+*This 3-minute demo shows all the key features including interactive quizzes, AI chat assistant, and progress tracking across all 5 topics.*
 
 ## 🚀 Features
 
