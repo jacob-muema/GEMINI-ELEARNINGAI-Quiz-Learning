@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+    <defs>
+        <linearGradient id="itilGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00C49F"/>
+            <stop offset="100%" stop-color="#008369"/>
+        </linearGradient>
+        <filter id="itilShadow" x="-10%" y="-10%" width="130%" height="130%">
+            <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.25"/>
+        </filter>
+    </defs>
+    <!-- Background rounded card -->
+    <rect x="2" y="2" width="296" height="116" rx="16" fill="#1e2229" stroke="#00C49F" stroke-width="2"/>
+    
+    <!-- ITIL Iconic Diamond -->
+    <g transform="translate(60, 60)">
+        <polygon points="0,-36 36,0 0,36 -36,0" fill="url(#itilGrad)" filter="url(#itilShadow)"/>
+        <!-- Inner facets -->
+        <polygon points="0,-36 36,0 0,0" fill="#ffffff" opacity="0.2"/>
+        <polygon points="-36,0 0,36 0,0" fill="#004739" opacity="0.3"/>
+        <text x="0" y="8" font-family="'Segoe UI', Arial, sans-serif" font-weight="900" font-size="22" fill="#ffffff" text-anchor="middle" letter-spacing="1">ITIL</text>
+    </g>
+    
+    <!-- ITIL 4 Foundation Branding Text -->
+    <text x="115" y="52" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="28" fill="#ffffff" letter-spacing="1.5">ITIL<tspan fill="#00C49F" font-weight="900">® 4</tspan></text>
+    <text x="116" y="74" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-weight="600" font-size="13" fill="#A0AEC0" letter-spacing="2">FOUNDATION</text>
+    <text x="116" y="93" font-family="'Segoe UI', Arial, sans-serif" font-weight="500" font-size="10" fill="#718096" letter-spacing="0.5">AXELOS / PeopleCert</text>
+</svg>

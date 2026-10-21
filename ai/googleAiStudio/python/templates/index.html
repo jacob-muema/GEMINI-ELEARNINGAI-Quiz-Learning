@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Home - AI E-Learning Platform{% endblock %}
+{% block title %}IT Certifications - Exam Prep & E-Learning Platform{% endblock %}
 
 {% block content %}
 <div style="text-align: center; margin-bottom: 3rem;">
     <h1 style="font-size: 3rem; margin-bottom: 1rem; color: var(--color-gray-900); background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-        🎓 AI E-Learning Platform
+        IT Certification Exam Prep
     </h1>
-    <p style="font-size: 1.3rem; color: var(--color-gray-600); max-width: 700px; margin: 0 auto; line-height: 1.6;">
-        Master new skills with AI-powered learning, interactive quizzes, and personalized feedback
+    <p style="font-size: 1.3rem; color: var(--color-gray-600); max-width: 750px; margin: 0 auto; line-height: 1.6;">
+        Prepare to pass industry IT certification exams including Microsoft AZ-900, AZ-400, AWS, CompTIA, ITIL, Cisco CCNA, and Kubernetes with practice quizzes and interactive study guides
     </p>
 </div>
 
@@ -16,11 +16,13 @@
 <div class="ai-chat-container" style="margin-bottom: 4rem; max-width: 900px; margin-left: auto; margin-right: auto;">
     <div class="ai-chat-card">
         <div class="ai-chat-header">
-            <div class="ai-avatar">🤖</div>
+            <div class="ai-avatar" style="display: flex; align-items: center; justify-content: center; background: #e0e7ff; color: #4338ca; border-radius: 50%; width: 50px; height: 50px;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
+            </div>
             <div>
-                <h2 style="margin: 0; font-size: 1.5rem; color: var(--color-gray-900);">Ask AI Anything</h2>
+                <h2 style="margin: 0; font-size: 1.5rem; color: var(--color-gray-900);">Ask AI Exam Tutor</h2>
                 <p style="margin: 0; color: var(--color-gray-600); font-size: 1rem;">
-                    Get instant answers to your programming and learning questions!
+                    Get clear explanations on certification objectives, exam topics, and architecture concepts!
                 </p>
             </div>
         </div>
@@ -30,7 +32,7 @@
                 <input 
                     type="text" 
                     id="user-question" 
-                    placeholder="Ask me anything... e.g., 'What is machine learning?' or 'How do I learn Python?'"
+                    placeholder="Ask an exam question... e.g., 'What is blue-green deployment in AZ-400?' or 'Explain the 4 dimensions of ITIL'"
                     class="chat-input"
                     required
                 >
@@ -40,7 +42,6 @@
                     id="ask-btn"
                 >
                     <span class="btn-text">Ask AI</span>
-                    <span class="btn-icon">🚀</span>
                 </button>
             </div>
         </form>
@@ -59,28 +60,60 @@
 <!-- Topics Grid -->
 <div style="margin-bottom: 2rem;">
     <h2 style="text-align: center; font-size: 2rem; margin-bottom: 2rem; color: var(--color-gray-900);">
-        🚀 Choose Your Learning Path
+        Certification Pathways
     </h2>
 </div>
 
 <div class="topics-grid">
     {% for topic_id, topic in topics.items() %}
     <div class="topic-card">
-        <div class="topic-icon">{{ topic.icon }}</div>
-        <div class="topic-content">
-            <h3 class="topic-title">{{ topic.name }}</h3>
-            <p class="topic-description">{{ topic.description }}</p>
-            <div class="topic-difficulty">
+        {% if topic.vendor_logo %}
+        <img src="{{ topic.vendor_logo }}" alt="Official vendor watermark" class="topic-watermark">
+        {% endif %}
+        
+        <div class="topic-logo-container">
+            {% if topic.logo %}
+                <img src="{{ topic.logo }}" alt="{{ topic.name }} official logo" class="topic-cert-logo">
+            {% else %}
+                <span style="font-size: 3rem;">{{ topic.icon }}</span>
+            {% endif %}
+        </div>
+        
+        <div class="topic-content" style="position: relative; z-index: 1;">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span class="cert-code-tag">{{ topic.code }}</span>
                 <span class="difficulty-badge">{{ topic.difficulty }}</span>
             </div>
+            <h3 class="topic-title">{{ topic.name }}</h3>
+            <p class="topic-description">{{ topic.description }}</p>
         </div>
-        <div class="topic-actions">
-            <a href="{{ url_for('topic_detail', topic_id=topic_id) }}" class="btn btn-primary topic-btn">
-                Start Learning
-            </a>
-            <a href="{{ url_for('study_material', topic_id=topic_id) }}" class="btn btn-secondary topic-btn">
-                Study Guide
-            </a>
+        <div class="topic-actions" style="position: relative; z-index: 1;">
+            {% if session.get('logged_in_user') %}
+                {% if topic_id == 'az900' %}
+                <a href="{{ url_for('az900_domain1') }}" class="btn topic-btn" style="background: linear-gradient(135deg, #0078d4, #005a9e); color: white; font-weight: 800; grid-column: span 2; width: 100%; margin-bottom: 0.35rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(0, 120, 212, 0.35);">
+                    <span>Start Your Journey</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="{{ url_for('topic_detail', topic_id=topic_id) }}" class="btn btn-secondary topic-btn" style="grid-column: span 2; width: 100%;">
+                    Course Overview & Practice Exam
+                </a>
+                {% else %}
+                <a href="{{ url_for('topic_detail', topic_id=topic_id) }}" class="btn btn-primary topic-btn">
+                    Start Your Journey
+                </a>
+                <a href="{{ url_for('study_material', topic_id=topic_id) }}" class="btn btn-secondary topic-btn">
+                    Study Guide
+                </a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('register', next=url_for('az900_domain1') if topic_id == 'az900' else url_for('topic_detail', topic_id=topic_id), message='Please create an account to start your learning journey and access course contents!') }}" class="btn topic-btn" style="background: linear-gradient(135deg, #0078d4, #005a9e); color: white; font-weight: 800; grid-column: span 2; width: 100%; margin-bottom: 0.35rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(0, 120, 212, 0.35);">
+                    <span>Start Your Journey</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="{{ url_for('login', next=url_for('az900_domain1') if topic_id == 'az900' else url_for('topic_detail', topic_id=topic_id), message='Please sign in to access course contents and resume your journey!') }}" class="btn btn-secondary topic-btn" style="grid-column: span 2; width: 100%;">
+                    Sign In to Continue
+                </a>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -89,15 +122,15 @@
 <!-- Features Section -->
 <div style="margin-top: 4rem; text-align: center;">
     <div class="features-card">
-        <h2 style="margin-bottom: 2rem; font-size: 2rem; color: var(--color-gray-900);">✨ Platform Features</h2>
+        <h2 style="margin-bottom: 2rem; font-size: 2rem; color: var(--color-gray-900);">Exam Preparation Features</h2>
         <div class="features-grid">
             <div class="feature-item">
                 <div class="feature-icon">🤖</div>
-                <h4>AI-Powered Learning</h4>
-                <p>Get instant answers and personalized guidance</p>
+                <h4>AI Exam Guidance</h4>
+                <p>Get instant answers and conceptual breakdowns</p>
             </div>
             <div class="feature-item">
-                <div class="feature-icon">🎯</div>
+                <div class="feature-icon">📋</div>
                 <h4>Interactive Quizzes</h4>
                 <p>Test your knowledge with curated questions</p>
             </div>
@@ -274,6 +307,60 @@
 .topic-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.topic-watermark {
+    position: absolute;
+    right: -15px;
+    bottom: -15px;
+    width: 120px;
+    height: 120px;
+    opacity: 0.06;
+    pointer-events: none;
+    object-fit: contain;
+    z-index: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.topic-card:hover .topic-watermark {
+    opacity: 0.12;
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.topic-logo-container {
+    position: relative;
+    z-index: 1;
+    height: 115px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(135deg, rgba(243, 244, 246, 0.7), rgba(255, 255, 255, 0.95));
+    border-radius: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--color-gray-200);
+}
+
+.topic-cert-logo {
+    max-height: 95px;
+    max-width: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.topic-card:hover .topic-cert-logo {
+    transform: scale(1.08) translateY(-2px);
+}
+
+.cert-code-tag {
+    background: var(--color-gray-900);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.25rem 0.65rem;
+    border-radius: 0.5rem;
+    letter-spacing: 0.8px;
 }
 
 .topic-icon {

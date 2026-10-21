@@ -3,10 +3,14 @@
 {% block title %}Quiz: {{ quiz.topic_name }} - AI E-Learning Platform{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
+<div style="text-align: center; margin-bottom: 2rem; position: relative;">
+    <div id="quiz-logo-wrapper" style="margin: 0 auto 1rem; width: 100px; height: 100px; display: none; align-items: center; justify-content: center; background: white; border-radius: 1rem; padding: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.08); border: 1px solid var(--color-gray-200);">
+        <img id="quiz-logo" src="" alt="Official Certification Logo" style="max-height: 85px; max-width: 85px; object-fit: contain;">
+    </div>
+    <div id="quiz-code-badge" style="display: inline-block; background: var(--color-gray-900); color: white; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; letter-spacing: 1px;">EXAM PRACTICE</div>
     <h1 style="text-align: center; margin-bottom: 0.5rem;" id="quiz-title">Loading Quiz...</h1>
     <p style="text-align: center; color: var(--color-gray-600);">
-        Answer all questions and click submit to see your results
+        Official Certification Exam Simulator • Answer all questions and submit to view detailed answer rationale
     </p>
 </div>
 
@@ -32,7 +36,7 @@
     <div style="text-align: center; margin-top: 2rem;">
         <button type="submit" class="btn btn-primary" id="submit-btn"
                 style="font-size: 1.1rem; padding: 1rem 2rem;" disabled>
-            Submit Quiz 📝
+            Submit Quiz
         </button>
         <p class="submit-message" id="submit-message">
             Please answer all questions to submit
@@ -49,7 +53,9 @@
 
     <!-- Score Summary -->
     <div class="card" style="text-align: center; margin-bottom: 2rem;">
-        <div style="font-size: 4rem; margin-bottom: 1rem;" id="score-emoji">🎉</div>
+        <div style="width: 70px; height: 70px; border-radius: 50%; background: #ecfdf5; border: 2px solid #10b981; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #059669;" id="score-emoji">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
         <div style="font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem;" id="score-percentage">0%</div>
         <p style="font-size: 1.2rem; color: var(--color-gray-600);" id="score-text">
             0 out of 5 questions answered correctly
@@ -59,7 +65,7 @@
     <!-- Detailed Results -->
     <div class="card" style="margin-bottom: 2rem;">
         <div class="card-header">
-            <h2 class="card-title">📋 Detailed Results</h2>
+            <h2 class="card-title">Detailed Results</h2>
         </div>
         <div id="detailed-results">
             <!-- Results will be populated here -->
@@ -232,303 +238,437 @@
 <script>
 // ALL QUIZ DATA IS HERE - NO BACKEND NEEDED!
 const QUIZ_DATA = {
-    python: {
-        name: "Python Programming",
+    az900: {
+        name: "Microsoft Azure Fundamentals (AZ-900)",
+        logo: "/static/images/logos/azure_az900.svg",
+        code: "AZ-900",
         questions: [
             {
-                question: "What is the correct way to create a variable in Python?",
+                question: "Which cloud computing model provides virtualized computing resources over the internet where you manage the OS, runtimes, and apps, while the cloud provider manages the physical infrastructure?",
                 options: {
-                    A: "var x = 5",
-                    B: "x = 5",
-                    C: "int x = 5",
-                    D: "create x = 5"
+                    A: "Platform as a Service (PaaS)",
+                    B: "Infrastructure as a Service (IaaS)",
+                    C: "Software as a Service (SaaS)",
+                    D: "Function as a Service (FaaS)"
                 },
                 correct: "B",
-                explanation: "In Python, you create variables by simply assigning a value using the = operator."
+                explanation: "IaaS provides on-demand infrastructure (VMs, storage, networking) where the customer retains control over the OS and installed software."
             },
             {
-                question: "Which data type is used to store text in Python?",
+                question: "Which Azure architectural feature consists of physically separate datacenters within the same region, each with independent power, cooling, and networking?",
                 options: {
-                    A: "int",
-                    B: "float",
-                    C: "str",
-                    D: "bool"
-                },
-                correct: "C",
-                explanation: "The 'str' data type is used to store text/string values in Python."
-            },
-            {
-                question: "What does the len() function do?",
-                options: {
-                    A: "Returns the length of an object",
-                    B: "Creates a new list",
-                    C: "Converts to integer",
-                    D: "Prints to console"
-                },
-                correct: "A",
-                explanation: "The len() function returns the number of items in an object like a string, list, or tuple."
-            },
-            {
-                question: "Which symbol is used for comments in Python?",
-                options: {
-                    A: "//",
-                    B: "/* */",
-                    C: "#",
-                    D: "--"
-                },
-                correct: "C",
-                explanation: "The # symbol is used to create single-line comments in Python."
-            },
-            {
-                question: "What is the output of print(type(5.0))?",
-                options: {
-                    A: "<class 'int'>",
-                    B: "<class 'float'>",
-                    C: "<class 'str'>",
-                    D: "<class 'number'>"
+                    A: "Resource Groups",
+                    B: "Availability Zones",
+                    C: "Geographies",
+                    D: "Azure Subscriptions"
                 },
                 correct: "B",
-                explanation: "5.0 is a floating-point number, so its type is 'float'."
+                explanation: "Availability Zones provide high availability and fault tolerance against datacenter outages within an Azure region."
+            },
+            {
+                question: "A company wants to enforce rules that prevent employees from creating virtual machines in unapproved regions and ensure required cost tags are applied. Which service should they use?",
+                options: {
+                    A: "Azure Monitor",
+                    B: "Azure Policy",
+                    C: "Microsoft Entra ID",
+                    D: "Azure Cost Management"
+                },
+                correct: "B",
+                explanation: "Azure Policy establishes guardrails and governance by enforcing rules and automated compliance checks on Azure resources."
+            },
+            {
+                question: "What is the primary difference between Capital Expenditure (CapEx) and Operational Expenditure (OpEx) in cloud economics?",
+                options: {
+                    A: "CapEx is for SaaS only; OpEx is for IaaS only",
+                    B: "CapEx requires upfront spending on physical hardware, while OpEx is ongoing spending on operational services without upfront costs",
+                    C: "CapEx is fully tax exempt; OpEx is taxable",
+                    D: "CapEx scales dynamically; OpEx is fixed forever"
+                },
+                correct: "B",
+                explanation: "CapEx involves upfront financial investment for physical assets, while OpEx is pay-as-you-go based on consumption."
+            },
+            {
+                question: "Which Microsoft cloud service manages user identities, provides Single Sign-On (SSO), and enforces Multi-Factor Authentication (MFA)?",
+                options: {
+                    A: "Azure Key Vault",
+                    B: "Microsoft Entra ID",
+                    C: "Azure Bastion",
+                    D: "Azure Dedicated Host"
+                },
+                correct: "B",
+                explanation: "Microsoft Entra ID (formerly Azure Active Directory) is the comprehensive cloud identity and access management solution."
             }
         ]
     },
-    javascript: {
-        name: "JavaScript Development",
+    az400: {
+        name: "Microsoft AZ-400: DevOps Solutions",
+        logo: "/static/images/logos/azure_az400.svg",
+        code: "AZ-400",
         questions: [
             {
-                question: "How do you declare a variable in JavaScript?",
+                question: "Which Azure Pipelines feature allows you to ensure deployments pause until manual sign-offs or external health checks pass before proceeding to production?",
                 options: {
-                    A: "var x = 5",
-                    B: "variable x = 5",
-                    C: "v x = 5",
-                    D: "declare x = 5"
-                },
-                correct: "A",
-                explanation: "In JavaScript, you can declare variables using 'var', 'let', or 'const'."
-            },
-            {
-                question: "Which method is used to add an element to the end of an array?",
-                options: {
-                    A: "add()",
-                    B: "append()",
-                    C: "push()",
-                    D: "insert()"
-                },
-                correct: "C",
-                explanation: "The push() method adds one or more elements to the end of an array."
-            },
-            {
-                question: "What is the correct way to write a JavaScript function?",
-                options: {
-                    A: "function myFunction() {}",
-                    B: "def myFunction() {}",
-                    C: "create myFunction() {}",
-                    D: "func myFunction() {}"
-                },
-                correct: "A",
-                explanation: "JavaScript functions are declared using the 'function' keyword."
-            },
-            {
-                question: "Which operator is used for strict equality in JavaScript?",
-                options: {
-                    A: "=",
-                    B: "==",
-                    C: "===",
-                    D: "!="
-                },
-                correct: "C",
-                explanation: "The === operator checks for strict equality (same value and same type)."
-            },
-            {
-                question: "How do you write a single-line comment in JavaScript?",
-                options: {
-                    A: "# This is a comment",
-                    B: "// This is a comment",
-                    C: "<!-- This is a comment -->",
-                    D: "/* This is a comment */"
+                    A: "Pipeline scheduled triggers",
+                    B: "Environments with Approvals and Checks",
+                    C: "Azure Artifacts upstream sources",
+                    D: "Deployment group tags"
                 },
                 correct: "B",
-                explanation: "Single-line comments in JavaScript start with //."
+                explanation: "Azure Pipelines Environments support approvals, manual validation, Azure Monitor alerts, and REST API gates to safely control deployment stages."
+            },
+            {
+                question: "You need to manage Git branching in Azure Repos such that production releases come from the main branch, changes are merged via pull requests, and CI build validation is required. What should you configure?",
+                options: {
+                    A: "Branch policies on the main branch",
+                    B: "Service hooks on Azure Repos",
+                    C: "Azure Artifacts package retention",
+                    D: "Git submodules"
+                },
+                correct: "A",
+                explanation: "Branch policies enforce code reviews, required reviewers, work item linking, and successful CI build validation before merges can occur."
+            },
+            {
+                question: "Which deployment pattern routes a small percentage of user traffic to a new version of an application to evaluate stability before rolling it out to 100% of users?",
+                options: {
+                    A: "Blue-Green deployment",
+                    B: "Canary deployment",
+                    C: "Big bang deployment",
+                    D: "Recreate deployment"
+                },
+                correct: "B",
+                explanation: "Canary deployment exposes new features to a small subset of users or traffic before promoting the release to the entire production fleet."
+            },
+            {
+                question: "In Azure DevOps, which mechanism should you use to securely store and inject API keys, certificates, and database passwords into CI/CD pipelines without exposing them in code?",
+                options: {
+                    A: "Azure Boards work items",
+                    B: "Variable groups linked to Azure Key Vault",
+                    C: "Git LFS (Large File Storage)",
+                    D: "Azure Test Plans configuration"
+                },
+                correct: "B",
+                explanation: "Variable groups in Azure Pipelines can link directly to Azure Key Vault to securely retrieve secrets at runtime without exposing them in plain text."
+            },
+            {
+                question: "Which tool integrated into Azure DevOps pipelines is commonly used for static application security testing (SAST) and code quality analysis to scan for security vulnerabilities?",
+                options: {
+                    A: "SonarQube",
+                    B: "Azure Bastion",
+                    C: "Microsoft Sentinel",
+                    D: "Azure Load Testing"
+                },
+                correct: "A",
+                explanation: "SonarQube scans source code for security vulnerabilities, bugs, and code smells during CI build steps."
             }
         ]
     },
-    data_science: {
-        name: "Data Science",
+    aws_solutions_architect: {
+        name: "AWS Certified Solutions Architect (SAA-C03)",
+        logo: "/static/images/logos/aws_solutions_architect.svg",
+        code: "SAA-C03",
         questions: [
             {
-                question: "What does CSV stand for?",
+                question: "An application requires high availability, automatic scaling across multiple Availability Zones, and session state persistence without storing state on EC2 instances. Which architecture is best?",
                 options: {
-                    A: "Computer Separated Values",
-                    B: "Comma Separated Values",
-                    C: "Character Separated Values",
-                    D: "Code Separated Values"
-                },
-                correct: "B",
-                explanation: "CSV stands for Comma Separated Values, a common data format."
-            },
-            {
-                question: "Which Python library is commonly used for data manipulation?",
-                options: {
-                    A: "NumPy",
-                    B: "Pandas",
-                    C: "Matplotlib",
-                    D: "Scikit-learn"
-                },
-                correct: "B",
-                explanation: "Pandas is the most popular Python library for data manipulation and analysis."
-            },
-            {
-                question: "What is the purpose of data visualization?",
-                options: {
-                    A: "To make data look pretty",
-                    B: "To understand patterns and insights in data",
-                    C: "To increase file size",
-                    D: "To slow down analysis"
-                },
-                correct: "B",
-                explanation: "Data visualization helps us understand patterns, trends, and insights in data."
-            },
-            {
-                question: "What is machine learning?",
-                options: {
-                    A: "Teaching computers to learn from data",
-                    B: "A type of hardware",
-                    C: "A programming language",
-                    D: "A database system"
+                    A: "Application Load Balancer, EC2 Auto Scaling group, and Amazon ElastiCache",
+                    B: "Network Load Balancer, single EC2 instance, and EBS Multi-Attach",
+                    C: "Route 53 latency routing, EC2 instances with local NVMe instance store",
+                    D: "CloudFront distribution pointing directly to an EBS volume"
                 },
                 correct: "A",
-                explanation: "Machine learning is a method of teaching computers to learn patterns from data."
+                explanation: "An Application Load Balancer distributes traffic across Auto Scaling EC2 instances, while ElastiCache (Redis/Memcached) provides fast external session caching."
             },
             {
-                question: "Which measure represents the middle value in a dataset?",
+                question: "You need to store archival data that is rarely accessed but must be retrieved within 3 to 5 hours when requested, at the lowest possible storage cost. Which Amazon S3 storage tier should you choose?",
                 options: {
-                    A: "Mean",
-                    B: "Mode",
-                    C: "Median",
-                    D: "Range"
+                    A: "S3 Standard",
+                    B: "S3 Glacier Flexible Retrieval",
+                    C: "S3 One Zone-IA",
+                    D: "S3 Standard-Infrequent Access"
+                },
+                correct: "B",
+                explanation: "S3 Glacier Flexible Retrieval provides low-cost archival storage with standard retrieval times between 3-5 hours."
+            },
+            {
+                question: "Which AWS service allows private connectivity between your VPC and supported AWS services without traversing the public internet?",
+                options: {
+                    A: "Internet Gateway",
+                    B: "VPC Endpoint (AWS PrivateLink)",
+                    C: "Virtual Private Gateway",
+                    D: "NAT Gateway"
+                },
+                correct: "B",
+                explanation: "VPC Endpoints powered by PrivateLink allow private connectivity between VPCs and AWS services without needing an internet gateway or public IP addresses."
+            },
+            {
+                question: "An eCommerce platform expects unpredictable traffic spikes during sales events. Which database solution provides single-digit millisecond latency at any scale with automatic throughput management?",
+                options: {
+                    A: "Amazon RDS for MySQL",
+                    B: "Amazon DynamoDB",
+                    C: "Amazon Redshift",
+                    D: "Amazon EMR"
+                },
+                correct: "B",
+                explanation: "Amazon DynamoDB is a managed NoSQL database offering single-digit millisecond latency and on-demand auto-scaling capacity."
+            },
+            {
+                question: "A company wants to run containerized microservices without having to manage, provision, or patch underlying EC2 servers. Which compute option meets this requirement?",
+                options: {
+                    A: "Amazon EC2 Dedicated Hosts",
+                    B: "AWS Lambda with container images larger than 10GB",
+                    C: "Amazon ECS or EKS with AWS Fargate",
+                    D: "Amazon Lightsail VPS"
                 },
                 correct: "C",
-                explanation: "The median is the middle value when data is arranged in order."
+                explanation: "AWS Fargate is a serverless compute engine for containers that works with both Amazon ECS and Amazon EKS, removing server management overhead."
             }
         ]
     },
-    web_development: {
-        name: "Web Development",
+    comptia_security: {
+        name: "CompTIA Security+ (SY0-701)",
+        logo: "/static/images/logos/comptia_security.svg",
+        code: "SY0-701",
         questions: [
             {
-                question: "What does HTML stand for?",
+                question: "An attacker sends an email targeted at the Chief Financial Officer pretending to be the CEO and requesting an urgent wire transfer to an unknown vendor. Which type of attack is this?",
                 options: {
-                    A: "Hyper Text Markup Language",
-                    B: "High Tech Modern Language",
-                    C: "Home Tool Markup Language",
-                    D: "Hyperlink and Text Markup Language"
+                    A: "Whaling",
+                    B: "Vishing",
+                    C: "Shoulder surfing",
+                    D: "Tailgating"
                 },
                 correct: "A",
-                explanation: "HTML stands for Hyper Text Markup Language, used to create web pages."
+                explanation: "Whaling is a targeted phishing attack directed specifically at high-profile executives or impersonating high-level executives for financial or data theft."
             },
             {
-                question: "Which CSS property is used to change text color?",
+                question: "Which security control principle ensures that a user or system process is granted only the minimum permissions necessary to perform required job duties?",
                 options: {
-                    A: "text-color",
-                    B: "font-color",
-                    C: "color",
-                    D: "text-style"
+                    A: "Separation of duties",
+                    B: "Principle of Least Privilege",
+                    C: "Defense in depth",
+                    D: "Implicit deny"
+                },
+                correct: "B",
+                explanation: "The Principle of Least Privilege (PoLP) dictates giving subjects only the rights needed to accomplish their authorized job functions."
+            },
+            {
+                question: "What cryptographic algorithm is asymmetric and widely used for secure key exchange and digital signatures?",
+                options: {
+                    A: "AES-256",
+                    B: "DES",
+                    C: "RSA",
+                    D: "ChaCha20"
                 },
                 correct: "C",
-                explanation: "The 'color' property in CSS is used to set the text color."
+                explanation: "RSA is an asymmetric public-key cryptosystem used for secure data transmission, key exchange, and digital signatures."
             },
             {
-                question: "What is the purpose of CSS?",
+                question: "Which security architecture operates under the fundamental principle of 'never trust, always verify' for all users and devices inside or outside the network?",
                 options: {
-                    A: "To add interactivity to web pages",
-                    B: "To style and layout web pages",
-                    C: "To create databases",
-                    D: "To handle server requests"
+                    A: "Zero Trust Architecture (ZTA)",
+                    B: "Air-gapped networking",
+                    C: "DMZ perimeter architecture",
+                    D: "Walled garden network"
                 },
-                correct: "B",
-                explanation: "CSS (Cascading Style Sheets) is used to style and layout web pages."
+                correct: "A",
+                explanation: "Zero Trust Architecture removes implicit trust and requires continuous authentication, authorization, and validation of every transaction."
             },
             {
-                question: "Which HTML tag is used to create a hyperlink?",
+                question: "Which incident response phase focuses on preventing an active security breach from expanding and causing further damage to systems?",
                 options: {
-                    A: "<link>",
-                    B: "<a>",
-                    C: "<href>",
-                    D: "<url>"
+                    A: "Preparation",
+                    B: "Containment",
+                    C: "Eradication",
+                    D: "Lessons Learned"
                 },
                 correct: "B",
-                explanation: "The <a> tag with the href attribute is used to create hyperlinks."
-            },
-            {
-                question: "What is responsive web design?",
-                options: {
-                    A: "Fast loading websites",
-                    B: "Websites that work on different screen sizes",
-                    C: "Websites with animations",
-                    D: "Websites that respond to user input"
-                },
-                correct: "B",
-                explanation: "Responsive web design ensures websites work well on different devices and screen sizes."
+                explanation: "The containment phase aims to isolate affected systems and stop the spread of an attack before remediation begins."
             }
         ]
     },
-    devops: {
-        name: "DevOps Engineering",
+    itil_foundation: {
+        name: "ITIL 4 Foundation",
+        logo: "/static/images/logos/itil.svg",
+        code: "ITIL-4",
         questions: [
             {
-                question: "What does CI/CD stand for?",
+                question: "According to ITIL 4, what is the definition of a 'Service'?",
                 options: {
-                    A: "Computer Integration/Computer Deployment",
-                    B: "Continuous Integration/Continuous Deployment",
-                    C: "Code Integration/Code Deployment",
-                    D: "Central Integration/Central Deployment"
+                    A: "A tangible product manufactured and sold to clients",
+                    B: "A means of enabling value co-creation by facilitating outcomes that customers want to achieve, without the customer having to manage specific costs and risks",
+                    C: "A formal contract between a vendor and an internal business team",
+                    D: "A set of specialized organizational assets and hardware"
                 },
                 correct: "B",
-                explanation: "CI/CD stands for Continuous Integration/Continuous Deployment."
+                explanation: "ITIL 4 defines a service as enabling value co-creation by facilitating outcomes customers desire without managing specific costs and risks."
             },
             {
-                question: "What is Docker used for?",
+                question: "Which ITIL Guiding Principle recommends assessing the current state and reusing existing successful processes rather than discarding everything to build from scratch?",
                 options: {
-                    A: "Database management",
-                    B: "Containerization of applications",
-                    C: "Web development",
-                    D: "Network security"
+                    A: "Focus on value",
+                    B: "Start where you are",
+                    C: "Think and work holistically",
+                    D: "Keep it simple and practical"
                 },
                 correct: "B",
-                explanation: "Docker is a platform for containerizing applications, making them portable and scalable."
+                explanation: "'Start where you are' emphasizes evaluating the existing baseline and leveraging working assets and services rather than starting over completely."
             },
             {
-                question: "What is the main benefit of version control systems like Git?",
+                question: "What are the Four Dimensions of Service Management in ITIL 4?",
                 options: {
-                    A: "Faster code execution",
-                    B: "Track changes and collaborate on code",
-                    C: "Automatic bug fixing",
-                    D: "Better user interfaces"
+                    A: "Plan, Do, Check, Act",
+                    B: "Organizations and people; Information and technology; Partners and suppliers; Value streams and processes",
+                    C: "Incident, Problem, Change, Release",
+                    D: "Cost, Quality, Speed, Reliability"
                 },
                 correct: "B",
-                explanation: "Version control systems help track changes in code and enable team collaboration."
+                explanation: "The Four Dimensions represent the holistic perspectives essential to facilitate effective and efficient value co-creation in ITIL 4."
             },
             {
-                question: "What is Infrastructure as Code (IaC)?",
+                question: "Which ITIL practice has the primary purpose of minimizing the negative impact of incidents by restoring normal service operation as quickly as possible?",
                 options: {
-                    A: "Writing code for mobile apps",
-                    B: "Managing infrastructure through code",
-                    C: "Creating user interfaces",
-                    D: "Database programming"
+                    A: "Problem Management",
+                    B: "Change Enablement",
+                    C: "Incident Management",
+                    D: "Continual Improvement"
                 },
-                correct: "B",
-                explanation: "IaC is the practice of managing and provisioning infrastructure through code."
+                correct: "C",
+                explanation: "Incident Management restores normal service operation as rapidly as possible to reduce disruption to business activities."
             },
             {
-                question: "What is the purpose of monitoring in DevOps?",
+                question: "What is the primary difference between an Incident and a Problem in ITIL 4?",
                 options: {
-                    A: "To watch employees work",
-                    B: "To track application performance and health",
-                    C: "To count lines of code",
-                    D: "To manage user accounts"
+                    A: "Incidents are hardware issues; Problems are software bugs",
+                    B: "An incident is an unplanned interruption or reduction in quality of a service, while a problem is a cause, or potential cause, of one or more incidents",
+                    C: "Incidents are handled by vendors; Problems are handled internally",
+                    D: "Incidents require changes; Problems never require changes"
                 },
                 correct: "B",
-                explanation: "Monitoring helps track application performance, health, and identify issues early."
+                explanation: "An incident is an unplanned disruption or reduction in service quality, whereas a problem is the underlying cause of one or more incidents."
+            }
+        ]
+    },
+    cisco_ccna: {
+        name: "Cisco CCNA (200-301)",
+        logo: "/static/images/logos/cisco_ccna.svg",
+        code: "200-301",
+        questions: [
+            {
+                question: "Which protocol operates at the Transport Layer (Layer 4) of the OSI model and provides reliable, connection-oriented data transfer with flow control?",
+                options: {
+                    A: "UDP",
+                    B: "IP",
+                    C: "TCP",
+                    D: "ICMP"
+                },
+                correct: "C",
+                explanation: "TCP (Transmission Control Protocol) is connection-oriented and provides reliable delivery with sequence tracking, acknowledgments, and flow control."
+            },
+            {
+                question: "What is the default administrative distance of OSPF on a Cisco router?",
+                options: {
+                    A: "90",
+                    B: "110",
+                    C: "120",
+                    D: "1"
+                },
+                correct: "B",
+                explanation: "The default Administrative Distance (AD) for Open Shortest Path First (OSPF) routes is 110."
+            },
+            {
+                question: "Which technology allows multiple physical Ethernet links to be combined into a single logical link to provide increased bandwidth and redundancy?",
+                options: {
+                    A: "Spanning Tree Protocol (STP)",
+                    B: "EtherChannel (LACP/PAgP)",
+                    C: "VLAN Trunking Protocol (VTP)",
+                    D: "Port Address Translation (PAT)"
+                },
+                correct: "B",
+                explanation: "EtherChannel bundles multiple physical links into one logical channel using LACP (802.3ad) or Cisco proprietary PAgP."
+            },
+            {
+                question: "In IPv4 subnetting, which subnet mask provides up to 30 usable host IP addresses per subnet?",
+                options: {
+                    A: "/26 (255.255.255.192)",
+                    B: "/27 (255.255.255.224)",
+                    C: "/28 (255.255.255.240)",
+                    D: "/29 (255.255.255.248)"
+                },
+                correct: "B",
+                explanation: "A /27 subnet mask leaves 5 host bits: 2^5 - 2 = 30 usable host IP addresses."
+            },
+            {
+                question: "What is the primary purpose of Spanning Tree Protocol (STP, 802.1D) in a switched local area network?",
+                options: {
+                    A: "To dynamically route packets between different autonomous systems",
+                    B: "To prevent Layer 2 switching loops and broadcast storms",
+                    C: "To encrypt wireless transmissions",
+                    D: "To allocate dynamic IP addresses to end workstations"
+                },
+                correct: "B",
+                explanation: "STP detects and blocks redundant links to prevent Layer 2 loops and broadcast storms in switched networks."
+            }
+        ]
+    },
+    kubernetes_cka: {
+        name: "Certified Kubernetes Administrator (CKA)",
+        logo: "/static/images/logos/kubernetes_cka.svg",
+        code: "CKA",
+        questions: [
+            {
+                question: "Which core component of the Kubernetes control plane acts as the primary data store for all cluster state and configurations?",
+                options: {
+                    A: "kube-scheduler",
+                    B: "kube-apiserver",
+                    C: "etcd",
+                    D: "kubelet"
+                },
+                correct: "C",
+                explanation: "etcd is a consistent, highly-available key-value store used as Kubernetes' backing store for all cluster state data."
+            },
+            {
+                question: "You want to ensure that a specific Pod runs on every single worker node in a Kubernetes cluster automatically. Which workload resource should you deploy?",
+                options: {
+                    A: "Deployment",
+                    B: "StatefulSet",
+                    C: "DaemonSet",
+                    D: "Job"
+                },
+                correct: "C",
+                explanation: "A DaemonSet ensures that all (or matching) nodes run a copy of a Pod, commonly used for log agents and monitoring daemons."
+            },
+            {
+                question: "Which Kubernetes component runs on every worker node to register the node, monitor PodSpecs, and ensure containers are running and healthy?",
+                options: {
+                    A: "kube-proxy",
+                    B: "kubelet",
+                    C: "kube-controller-manager",
+                    D: "containerd CLI"
+                },
+                correct: "B",
+                explanation: "The kubelet is the node agent that registers nodes with the API server and manages container lifecycles on the node."
+            },
+            {
+                question: "What type of Kubernetes Service assigns a stable IP address from an internal pool accessible only from within the cluster?",
+                options: {
+                    A: "ClusterIP",
+                    B: "NodePort",
+                    C: "LoadBalancer",
+                    D: "ExternalName"
+                },
+                correct: "A",
+                explanation: "ClusterIP is the default Kubernetes Service type, exposing the service on a cluster-internal IP address."
+            },
+            {
+                question: "Which command in kubectl correctly creates a new namespace called 'production' imperatively?",
+                options: {
+                    A: "kubectl run production --type=namespace",
+                    B: "kubectl create namespace production",
+                    C: "kubectl new ns production",
+                    D: "kubectl apply namespace production"
+                },
+                correct: "B",
+                explanation: "The command 'kubectl create namespace production' (or 'kubectl create ns production') creates a new namespace imperatively."
             }
         ]
     }
@@ -567,6 +707,15 @@ function initializeQuiz(topic) {
     
     const quizData = QUIZ_DATA[topic];
     currentQuestions = quizData.questions;
+    
+    // Update logo and badges
+    if (quizData.logo) {
+        document.getElementById('quiz-logo').src = quizData.logo;
+        document.getElementById('quiz-logo-wrapper').style.display = 'flex';
+    }
+    if (quizData.code) {
+        document.getElementById('quiz-code-badge').textContent = `${quizData.code} EXAM SIMULATION`;
+    }
     
     // Update title
     document.getElementById('quiz-title').textContent = `${quizData.name} Quiz`;

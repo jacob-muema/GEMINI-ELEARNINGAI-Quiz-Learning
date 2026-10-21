@@ -1,0 +1,704 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - IT Certification Hub{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <!-- Compact Header -->
+        <div class="auth-header">
+            <div class="auth-icon-badge">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <line x1="19" y1="8" x2="19" y2="14"></line>
+                    <line x1="22" y1="11" x2="16" y2="11"></line>
+                </svg>
+            </div>
+            <div>
+                <h1 class="auth-title">Start Your Learning Journey</h1>
+                <p class="auth-subtitle">Create your free account to access certification courses and practice exams.</p>
+            </div>
+        </div>
+
+        <!-- Info / Redirect Message -->
+        {% if message %}
+        <div class="alert alert-info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>{{ message }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="alert alert-danger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Google One-Click Sign-In Button -->
+        <a href="{{ url_for('google_login', next=next) }}" class="btn-google">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google</span>
+        </a>
+
+        <!-- Divider -->
+        <div class="auth-divider">
+            <span class="divider-line"></span>
+            <span class="divider-text">or sign up with email</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <!-- Compact Signup Form -->
+        <form method="POST" action="{{ url_for('register', next=next) }}" id="signup-form" novalidate>
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <!-- Row 1: Name & Username side-by-side -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label for="display_name" class="form-label">Full Name</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="display_name" 
+                            name="display_name" 
+                            class="form-control" 
+                            placeholder="Alex Johnson"
+                            autocomplete="name"
+                            value="{{ form_data.get('display_name', '') if form_data else '' }}"
+                            required
+                            autofocus
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+                            </svg>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="form-control" 
+                            placeholder="alex_cloud"
+                            autocomplete="username"
+                            value="{{ form_data.get('username', '') if form_data else '' }}"
+                            minlength="3"
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Email Address -->
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </span>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-control" 
+                        placeholder="learner@example.com"
+                        autocomplete="email"
+                        value="{{ form_data.get('email', '') if form_data else '' }}"
+                        required
+                    >
+                </div>
+            </div>
+
+            <!-- Row 3: Password & Confirm Password side-by-side -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <div class="form-label-row">
+                        <label for="password" class="form-label">Password</label>
+                        <span id="password-strength-text" class="strength-label"></span>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-control with-toggle" 
+                            placeholder="Min 6 chars"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+                        <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('password', this)" title="Show/Hide" aria-label="Toggle password">
+                            <svg class="eye-open" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="7" r="3"></circle>
+                            </svg>
+                            <svg class="eye-closed" style="display:none;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Micro Strength bar -->
+                    <div class="strength-bar-bg">
+                        <div id="strength-bar-fill" class="strength-bar-fill"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-label-row">
+                        <label for="confirm_password" class="form-label">Confirm</label>
+                        <span id="match-status" class="match-status"></span>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </span>
+                        <input 
+                            type="password" 
+                            id="confirm_password" 
+                            name="confirm_password" 
+                            class="form-control with-toggle" 
+                            placeholder="Re-type password"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+                        <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('confirm_password', this)" title="Show/Hide" aria-label="Toggle confirm password">
+                            <svg class="eye-open" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="7" r="3"></circle>
+                            </svg>
+                            <svg class="eye-closed" style="display:none;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Single line requirements chips -->
+            <div class="pw-chips">
+                <span class="chip" id="req-length">• 6+ chars</span>
+                <span class="chip" id="req-number">• Number</span>
+                <span class="chip" id="req-upper">• Uppercase</span>
+                <span class="chip" id="req-special">• Special char</span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="auth-btn" id="submit-btn">
+                <span>Create Free Account & Start Learning</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="auth-footer">
+            <span>Already have an account? </span>
+            <a href="{{ url_for('login', next=next) }}" class="auth-link">Sign In</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-wrapper {
+    max-width: 520px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--color-gray-200);
+}
+
+.auth-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.15rem;
+    text-align: left;
+}
+
+.auth-icon-badge {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    color: #10b981;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
+}
+
+.auth-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-gray-900);
+    letter-spacing: -0.02em;
+    margin: 0 0 0.15rem 0;
+}
+
+.auth-subtitle {
+    color: var(--color-gray-500);
+    font-size: 0.85rem;
+    line-height: 1.35;
+    margin: 0;
+}
+
+/* Google Button */
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background: #ffffff;
+    border: 1.5px solid var(--color-gray-300);
+    border-radius: 0.55rem;
+    color: var(--color-gray-700);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    margin-bottom: 0.85rem;
+}
+
+.btn-google:hover {
+    background: #f9fafb;
+    border-color: var(--color-gray-400);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Divider */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0.85rem 0;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-gray-200);
+}
+
+.divider-text {
+    font-size: 0.76rem;
+    color: var(--color-gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Compact Alerts */
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 0.83rem;
+    line-height: 1.35;
+    margin-bottom: 0.85rem;
+}
+
+.alert-info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+}
+
+.alert-danger {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+/* Grids */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+@media (max-width: 500px) {
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+.form-group {
+    margin-bottom: 0.85rem;
+}
+
+.form-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--color-gray-700);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 0.75rem;
+    color: var(--color-gray-400);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.55rem 0.75rem 0.55rem 2.25rem;
+    border: 1.2px solid var(--color-gray-300);
+    border-radius: 0.55rem;
+    font-size: 0.88rem;
+    color: var(--color-gray-900);
+    background: #ffffff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+}
+
+.form-control.with-toggle {
+    padding-right: 2.25rem;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.input-wrapper:focus-within .input-icon {
+    color: var(--color-primary);
+}
+
+/* Password Toggle */
+.btn-toggle-pw {
+    position: absolute;
+    right: 0.45rem;
+    background: transparent;
+    border: none;
+    color: var(--color-gray-400);
+    padding: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.btn-toggle-pw:hover {
+    color: var(--color-gray-700);
+}
+
+/* Micro Strength bar */
+.strength-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-gray-400);
+}
+
+.strength-bar-bg {
+    width: 100%;
+    height: 3px;
+    background: var(--color-gray-200);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 0.35rem;
+}
+
+.strength-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #ef4444;
+    transition: width 0.25s ease, background 0.25s ease;
+}
+
+/* Inline single-line chips */
+.pw-chips {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem;
+    margin-top: 0.15rem;
+    margin-bottom: 0.85rem;
+    font-size: 0.74rem;
+    color: var(--color-gray-400);
+}
+
+.chip {
+    transition: color 0.2s, font-weight 0.2s;
+}
+
+.chip.met {
+    color: #059669;
+    font-weight: 600;
+}
+
+/* Confirm match status */
+.match-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.match-status.matched {
+    color: #059669;
+}
+
+.match-status.mismatch {
+    color: #dc2626;
+}
+
+/* Submit Button */
+.auth-btn {
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.55rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 3px 10px rgba(99, 102, 241, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(99, 102, 241, 0.4);
+}
+
+/* Footer */
+.auth-footer {
+    text-align: center;
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-gray-200);
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+}
+
+.auth-link {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+</style>
+
+<script>
+function togglePasswordVisibility(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    const eyeOpen = btn.querySelector('.eye-open');
+    const eyeClosed = btn.querySelector('.eye-closed');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'block';
+    } else {
+        input.type = 'password';
+        eyeOpen.style.display = 'block';
+        eyeClosed.style.display = 'none';
+    }
+}
+
+const pwInput = document.getElementById('password');
+const confirmInput = document.getElementById('confirm_password');
+const strengthBar = document.getElementById('strength-bar-fill');
+const strengthText = document.getElementById('password-strength-text');
+const matchStatus = document.getElementById('match-status');
+
+const reqLength = document.getElementById('req-length');
+const reqNumber = document.getElementById('req-number');
+const reqUpper = document.getElementById('req-upper');
+const reqSpecial = document.getElementById('req-special');
+
+function checkPasswordStrength(pw) {
+    let score = 0;
+    
+    const hasLength = pw.length >= 6;
+    const hasIdealLength = pw.length >= 8;
+    updateChip(reqLength, hasLength, '6+ chars');
+    if (hasLength) score += 1;
+    if (hasIdealLength) score += 1;
+
+    const hasNumber = /\d/.test(pw);
+    updateChip(reqNumber, hasNumber, 'Number');
+    if (hasNumber) score += 1;
+
+    const hasUpper = /[A-Z]/.test(pw);
+    updateChip(reqUpper, hasUpper, 'Uppercase');
+    if (hasUpper) score += 1;
+
+    const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+    updateChip(reqSpecial, hasSpecial, 'Special char');
+    if (hasSpecial) score += 1;
+
+    if (!pw) {
+        strengthBar.style.width = '0%';
+        strengthText.textContent = '';
+        return;
+    }
+
+    if (score <= 1) {
+        strengthBar.style.width = '25%';
+        strengthBar.style.background = '#ef4444';
+        strengthText.textContent = 'Weak';
+        strengthText.style.color = '#ef4444';
+    } else if (score <= 3) {
+        strengthBar.style.width = '55%';
+        strengthBar.style.background = '#f59e0b';
+        strengthText.textContent = 'Fair';
+        strengthText.style.color = '#f59e0b';
+    } else if (score === 4) {
+        strengthBar.style.width = '75%';
+        strengthBar.style.background = '#3b82f6';
+        strengthText.textContent = 'Good';
+        strengthText.style.color = '#3b82f6';
+    } else {
+        strengthBar.style.width = '100%';
+        strengthBar.style.background = '#10b981';
+        strengthText.textContent = 'Strong ✓';
+        strengthText.style.color = '#10b981';
+    }
+}
+
+function updateChip(element, isMet, label) {
+    if (isMet) {
+        element.classList.add('met');
+        element.textContent = '✓ ' + label;
+    } else {
+        element.classList.remove('met');
+        element.textContent = '• ' + label;
+    }
+}
+
+function checkPasswordMatch() {
+    const pw = pwInput.value;
+    const cpw = confirmInput.value;
+
+    if (!cpw) {
+        matchStatus.textContent = '';
+        matchStatus.className = 'match-status';
+        confirmInput.style.borderColor = 'var(--color-gray-300)';
+        return;
+    }
+
+    if (pw === cpw) {
+        matchStatus.textContent = '✓ Match';
+        matchStatus.className = 'match-status matched';
+        confirmInput.style.borderColor = '#10b981';
+    } else {
+        matchStatus.textContent = '✕ Mismatch';
+        matchStatus.className = 'match-status mismatch';
+        confirmInput.style.borderColor = '#ef4444';
+    }
+}
+
+pwInput.addEventListener('input', function() {
+    checkPasswordStrength(this.value);
+    if (confirmInput.value) {
+        checkPasswordMatch();
+    }
+});
+
+confirmInput.addEventListener('input', checkPasswordMatch);
+
+document.getElementById('signup-form').addEventListener('submit', function(e) {
+    const pw = pwInput.value;
+    const cpw = confirmInput.value;
+
+    if (pw !== cpw) {
+        e.preventDefault();
+        alert('Passwords do not match. Please verify both password fields.');
+        confirmInput.focus();
+        return false;
+    }
+
+    if (pw.length < 6) {
+        e.preventDefault();
+        alert('Password must be at least 6 characters long.');
+        pwInput.focus();
+        return false;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.style.opacity = '0.75';
+    btn.innerHTML = '<span>Creating Account...</span>';
+});
+</script>
+{% endblock %}

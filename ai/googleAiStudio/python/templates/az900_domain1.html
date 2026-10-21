@@ -1,0 +1,2939 @@
+{% extends "base.html" %}
+
+{% block title %}AZ-900 Domain 1: Describe Cloud Concepts - Interactive Learning{% endblock %}
+
+{% block content %}
+<!-- Fullscreen Celebration Fireworks Canvas -->
+<canvas id="celebration-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999; display: none;"></canvas>
+
+<!-- Audio Elements -->
+<audio id="hoiyee-audio" src="/static/audio/hoiyee.wav" preload="auto"></audio>
+
+<div style="max-width: 1060px; margin: 0 auto; padding-bottom: 4rem;">
+    <!-- Breadcrumb -->
+    <nav style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--color-gray-500); margin-bottom: 1.5rem;">
+        <a href="{{ url_for('index') }}" style="color: var(--color-gray-600); text-decoration: none;">Certifications</a>
+        <span>/</span>
+        <a href="{{ url_for('topic_detail', topic_id='az900') }}" style="color: var(--color-gray-600); text-decoration: none;">Microsoft Azure AZ-900</a>
+        <span>/</span>
+        <span style="color: var(--color-primary); font-weight: 600;">Domain 1: Cloud Concepts</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border-radius: 1rem; padding: 2rem 2.5rem; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15); margin-bottom: 2rem; position: relative; overflow: hidden; border: 1px solid #334155;">
+        <div style="position: absolute; right: -20px; top: -20px; width: 220px; height: 220px; opacity: 0.08; pointer-events: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M19 18H6a4 4 0 0 1 0-8 6 6 0 0 1 11.6-1.5A4.5 4.5 0 0 1 19 18z"></path>
+            </svg>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+            <span style="background: #0078d4; color: white; font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 0.375rem; letter-spacing: 0.5px;">AZ-900 EXAM BLUEPRINT</span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #e2e8f0; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 0.375rem;">WEIGHT: 25-30%</span>
+            <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 0.375rem;">MICRO-LEARNING ACTIVE</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; font-size: 0.72rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 0.375rem;">UNOFFICIAL PREP TOOL</span>
+        </div>
+
+        <h1 style="font-size: 2.15rem; font-weight: 800; margin: 0 0 0.6rem 0; letter-spacing: -0.5px; color: #ffffff;">
+            Domain 1: Describe Cloud Concepts
+        </h1>
+        <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.6; margin: 0 0 1.5rem 0; max-width: 820px;">
+            Master cloud fundamentals step-by-step. Every subtopic includes clear real-world explanations followed by a knowledge-check quiz. Complete each quiz to unlock the next subtopic and earn your celebratory sparks!
+        </p>
+
+        <!-- Sound & Progress Controls Bar -->
+        <div style="display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; pt-2; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <button id="toggle-sound-btn" onclick="testSound()" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.45rem 0.9rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <span>Test Audio (Hoiyee!)</span>
+                </button>
+
+                <button onclick="resetModuleProgress()" style="background: transparent; border: 1px solid rgba(255,255,255,0.25); color: #cbd5e1; padding: 0.45rem 0.9rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                    <span>Reset Progression</span>
+                </button>
+            </div>
+
+            <!-- Quick AI Study Buddy Launcher inside banner -->
+            <button onclick="toggleChatPanel()" style="background: linear-gradient(135deg, #0078d4, #0284c7); border: 1px solid #38bdf8; color: white; padding: 0.5rem 1.1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Ask AI Tutor (Side Panel)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Interactive Stepper & Domain Progress Tracker -->
+    <div style="background: white; border-radius: 0.75rem; padding: 1.25rem 1.75rem; border: 1px solid var(--color-gray-200); box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <div style="font-weight: 700; color: var(--color-gray-800); font-size: 0.95rem;">Learning Progress: Domain 1</div>
+            <div style="font-weight: 700; color: var(--color-primary); font-size: 0.95rem;" id="progress-percent-label">0% Completed</div>
+        </div>
+        
+        <div style="background: var(--color-gray-100); height: 8px; border-radius: 999px; overflow: hidden; margin-bottom: 1.25rem;">
+            <div id="domain-progress-bar" style="background: linear-gradient(90deg, #0078d4, #10b981); height: 100%; width: 0%; transition: width 0.4s ease;"></div>
+        </div>
+
+        <!-- 3 Step Tabs Navigation -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;" id="stepper-grid">
+            <!-- Step 1.1 -->
+            <div id="step-nav-1" class="step-nav-card active" onclick="navigateToSubtopic(1)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span class="step-indicator" id="step-badge-1">1.1</span>
+                    <span class="step-title">Describe Cloud Computing</span>
+                </div>
+                <div class="step-status" id="step-status-1">In Progress</div>
+            </div>
+
+            <!-- Step 1.2 -->
+            <div id="step-nav-2" class="step-nav-card locked" onclick="navigateToSubtopic(2)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span class="step-indicator" id="step-badge-2">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </span>
+                    <span class="step-title">Benefits of Cloud Services</span>
+                </div>
+                <div class="step-status" id="step-status-2">Locked</div>
+            </div>
+
+            <!-- Step 1.3 -->
+            <div id="step-nav-3" class="step-nav-card locked" onclick="navigateToSubtopic(3)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span class="step-indicator" id="step-badge-3">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </span>
+                    <span class="step-title">Cloud Service Types</span>
+                </div>
+                <div class="step-status" id="step-status-3">Locked</div>
+            </div>
+        </div>
+
+        <!-- Sticky Quick-Ask AI Tutor Bar -->
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--color-gray-200); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="font-size: 0.85rem; color: var(--color-gray-600); display: flex; align-items: center; gap: 0.4rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+                <span>Have a question about what you're reading? Ask your AI Tutor anytime while studying!</span>
+            </div>
+            <button onclick="toggleChatPanel()" style="background: #eff6ff; color: #0078d4; border: 1px solid #bfdbfe; font-size: 0.8rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 0.4rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Open AI Study Buddy →</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Celebration Banner Alert (shown upon passing a subtopic) -->
+    <div id="celebration-alert" style="display: none; background: #ecfdf5; border: 2px solid #10b981; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.85rem;">
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: #10b981; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0; color: #065f46; font-size: 1.15rem; font-weight: 700;" id="celebration-title">Knowledge Check Passed! Hoiyee!</h3>
+                    <p style="margin: 0.2rem 0 0 0; color: #047857; font-size: 0.95rem;" id="celebration-subtitle">Great job! The next subtopic has been successfully unlocked.</p>
+                </div>
+            </div>
+            <button id="celebration-next-btn" onclick="continueToNextSubtopic()" style="background: #059669; color: white; border: none; font-weight: 700; padding: 0.65rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                <span>Continue to Next Subtopic</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SUBTOPIC 1.1: Describe Cloud Computing                                    -->
+    <!-- ========================================================================= -->
+    <div id="subtopic-section-1" class="subtopic-container">
+        <!-- Completed Summary Card (Visible when finished/collapsed) -->
+        <div id="subtopic-completed-bar-1" class="subtopic-completed-bar" style="display: none;">
+            <div class="sc-left">
+                <div class="sc-check-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div>
+                    <div class="sc-badge">SUBTOPIC 1.1 COMPLETED</div>
+                    <h3 class="sc-title">Describe Cloud Computing</h3>
+                    <p class="sc-sub">Cloud definitions, shared responsibility, deployment models, CapEx vs OpEx.</p>
+                </div>
+            </div>
+            <div class="sc-right">
+                <span class="sc-score" id="sc-score-1">Score: Passed</span>
+                <button type="button" class="sc-toggle-btn" onclick="toggleSubtopicReview(1)">
+                    <span id="sc-toggle-text-1">Review Material</span>
+                    <svg id="sc-toggle-arrow-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="subtopic-content-wrapper-1" class="subtopic-content-wrapper">
+        <div class="subtopic-header">
+            <span class="subtopic-tag">SUBTOPIC 1.1</span>
+            <h2>Describe Cloud Computing</h2>
+            <p>Understand the foundational definition of cloud computing, the shared responsibility model, deployment models, and cloud economics.</p>
+        </div>
+
+        <div class="content-card">
+            <!-- 1. Definition of Cloud Computing -->
+            <div class="concept-block">
+                <div class="concept-header">
+                    <span class="concept-num">1</span>
+                    <h3>Definition of Cloud Computing</h3>
+                </div>
+                <p>
+                    <strong>Cloud computing</strong> is the delivery of computing services over the internet ("the cloud") on an on-demand, pay-as-you-go basis. Instead of purchasing, operating, and maintaining physical servers and hard drives, you rent access to services from a cloud provider such as <strong>Microsoft Azure</strong>.
+                </p>
+
+                <!-- Intuitive Real-world Analogy -->
+                <div class="analogy-box">
+                    <div class="analogy-label">REAL-WORLD ANALOGY: MUNICIPAL POWER GRID VS. GENERATOR</div>
+                    <p style="margin: 0; color: #1e3a8a; font-size: 0.95rem; line-height: 1.5;">
+                        Imagine you need electricity for your home or business. You don't build your own power plant or invest millions in diesel generators. You simply plug into the electrical grid, switch on the lights, and receive a monthly bill for the exact kilowatt-hours you consumed. Cloud computing works identically: you plug into Azure's global infrastructure and pay only for the compute and storage units you use.
+                    </p>
+                </div>
+
+                <div class="grid-4" style="margin-top: 1.25rem;">
+                    <div class="pill-card">
+                        <div class="pill-title">Compute</div>
+                        <div class="pill-desc">Processing power, virtual machines, containers, and serverless execution.</div>
+                    </div>
+                    <div class="pill-card">
+                        <div class="pill-title">Storage</div>
+                        <div class="pill-desc">Durable, scalable storage for files, disks, relational tables, and backups.</div>
+                    </div>
+                    <div class="pill-card">
+                        <div class="pill-title">Networking</div>
+                        <div class="pill-desc">Secure connections between resources, load balancers, and firewalls.</div>
+                    </div>
+                    <div class="pill-card">
+                        <div class="pill-title">Databases</div>
+                        <div class="pill-desc">Managed relational (SQL) and NoSQL engines with automatic failover.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Shared Responsibility Model -->
+            <div class="concept-block">
+                <div class="concept-header">
+                    <span class="concept-num">2</span>
+                    <h3>Shared Responsibility Model</h3>
+                </div>
+                <p>
+                    When using cloud services, security and management duties are divided between <strong>Microsoft</strong> (the cloud provider) and <strong>You</strong> (the customer). The exact division shifts depending on the cloud service model you select.
+                </p>
+
+                <div style="background: #f8fafc; border: 1px solid var(--color-gray-200); border-radius: 0.75rem; overflow: hidden; margin: 1.25rem 0;">
+                    <div style="padding: 1rem 1.25rem; background: #f1f5f9; border-bottom: 1px solid var(--color-gray-200); font-weight: 700; color: var(--color-gray-800); font-size: 0.95rem;">
+                        Responsibility Matrix by Layer
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Architecture Layer</th>
+                                    <th>On-Premises</th>
+                                    <th>IaaS</th>
+                                    <th>PaaS</th>
+                                    <th>SaaS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Information & Data</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Devices & Endpoints</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Accounts & Identity (Entra ID)</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Applications</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Operating System (OS Patching)</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Network Controls</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-shared">Shared</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Physical Datacenter & Hardware</strong></td>
+                                    <td><span class="badge badge-customer">Customer</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                    <td><span class="badge badge-microsoft">Microsoft</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="exam-tip-box">
+                    <strong>AZ-900 Core Exam Rule:</strong> In every cloud model (IaaS, PaaS, SaaS), the customer is <em>always</em> responsible for data security, credentials, and endpoint devices. Microsoft is <em>always</em> responsible for physical datacenter security, power, and physical hypervisor hardware.
+                </div>
+            </div>
+
+            <!-- 3. Cloud Deployment Models -->
+            <div class="concept-block">
+                <div class="concept-header">
+                    <span class="concept-num">3</span>
+                    <h3>Cloud Deployment Models</h3>
+                </div>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="spec-card">
+                        <div class="spec-title">Public Cloud</div>
+                        <p class="spec-desc">Owned and operated by a third-party cloud service provider (such as Microsoft Azure). Resources are delivered over the public internet and shared (multi-tenant) across multiple organizations, with strict logical isolation.</p>
+                        <div class="spec-bullet">No hardware purchase; high scalability; pay-as-you-go pricing.</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-title">Private Cloud</div>
+                        <p class="spec-desc">Computing infrastructure used exclusively by one single organization. It can be physically located at your organization's on-site datacenter or hosted by a third party.</p>
+                        <div class="spec-bullet">Complete control and isolation; high capital investment and maintenance responsibility.</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-title">Hybrid Cloud</div>
+                        <p class="spec-desc">Combines a public cloud and a private cloud (or on-premises datacenter), allowing data and applications to be securely shared between them via VPN or ExpressRoute.</p>
+                        <div class="spec-bullet">Enables compliance (sensitive data stays on-prem) while leveraging cloud elasticity.</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-title">Multi-Cloud</div>
+                        <p class="spec-desc">Using services from multiple distinct public cloud providers (e.g. running specific services in Microsoft Azure while utilizing AWS or Google Cloud for other specialized workloads).</p>
+                        <div class="spec-bullet">Avoids single-vendor lock-in; leverages the unique strengths of each cloud vendor.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Consumption-Based Model & CapEx vs OpEx -->
+            <div class="concept-block" style="border-bottom: none;">
+                <div class="concept-header">
+                    <span class="concept-num">4</span>
+                    <h3>Consumption-Based Model: CapEx vs. OpEx</h3>
+                </div>
+                <p>
+                    Cloud computing operates primarily on a <strong>consumption-based model</strong> (Pay-As-You-Go). There are no upfront purchase fees; you only pay for the exact resources (virtual machine run-time, storage GBs, network bandwidth) you consume.
+                </p>
+
+                <div class="grid-2" style="margin-top: 1.25rem;">
+                    <div class="pricing-card capex">
+                        <div class="pricing-badge">TRADITIONAL ON-PREMISES</div>
+                        <div class="pricing-name">Capital Expenditure (CapEx)</div>
+                        <ul class="pricing-list">
+                            <li>Substantial upfront financial investment in physical servers, storage arrays, cooling, and real estate.</li>
+                            <li>Purchased assets depreciate on your accounting balance sheet over 3 to 5 years.</li>
+                            <li>High financial risk: buying excess capacity leads to idle waste; buying too little bottlenecks growth.</li>
+                        </ul>
+                    </div>
+
+                    <div class="pricing-card opex">
+                        <div class="pricing-badge" style="background: #0284c7;">CLOUD CONSUMPTION</div>
+                        <div class="pricing-name">Operational Expenditure (OpEx)</div>
+                        <ul class="pricing-list">
+                            <li>Zero upfront hardware purchase costs; pay only for operational subscription services.</li>
+                            <li>Billed as an operating expense in the current tax period for immediate tax deduction benefits.</li>
+                            <li>Maximum agility: spin up 100 virtual machines for a weekend project, then deallocate them to stop billing immediately.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- KNOWLEDGE CHECK: SUBTOPIC 1.1 QUIZ                                -->
+        <!-- ================================================================= -->
+        <div class="quiz-panel">
+            <div class="quiz-panel-header">
+                <div>
+                    <span class="quiz-panel-badge">KNOWLEDGE CHECK</span>
+                    <h3 style="margin: 0.35rem 0 0 0; font-size: 1.35rem; color: var(--color-gray-900);">Subtopic 1.1 Understanding Assessment</h3>
+                    <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-600); font-size: 0.9rem;">
+                        Answer all 3 questions below. Score at least 2 out of 3 to unlock Subtopic 1.2!
+                    </p>
+                </div>
+                <div class="quiz-score-indicator" id="score-ind-1">Ready</div>
+            </div>
+
+            <form id="quiz-form-1" onsubmit="submitSubtopicQuiz(event, 1)">
+                <!-- Question 1.1.1 -->
+                <div class="quiz-question-box" id="qbox-1-1">
+                    <div class="quiz-q-num">QUESTION 1 OF 3</div>
+                    <div class="quiz-q-text">
+                        Under the Cloud Shared Responsibility Model, which security and administrative responsibility remains the customer's duty across ALL deployment and service models (IaaS, PaaS, SaaS, and On-Premises)?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('1-1', 'A')">
+                            <input type="radio" name="q_1_1" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Physical security and biometric access to the datacenter building</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-1', 'B')">
+                            <input type="radio" name="q_1_1" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Data classification, user accounts, and identity management credentials</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-1', 'C')">
+                            <input type="radio" name="q_1_1" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Underlying physical hypervisor virtualization updates and host hardware maintenance</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-1', 'D')">
+                            <input type="radio" name="q_1_1" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Operating system kernel security patching and driver updates</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-1-1"></div>
+                </div>
+
+                <!-- Question 1.1.2 -->
+                <div class="quiz-question-box" id="qbox-1-2">
+                    <div class="quiz-q-num">QUESTION 2 OF 3</div>
+                    <div class="quiz-q-text">
+                        A commercial bank keeps its sensitive customer core banking database in an on-premises private datacenter due to national banking compliance laws, but hosts its customer-facing web and mobile analytics in Microsoft Azure. Which cloud deployment model does this architecture represent?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('1-2', 'A')">
+                            <input type="radio" name="q_1_2" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Public Cloud</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-2', 'B')">
+                            <input type="radio" name="q_1_2" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Private Cloud</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-2', 'C')">
+                            <input type="radio" name="q_1_2" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Hybrid Cloud</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-2', 'D')">
+                            <input type="radio" name="q_1_2" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Multi-Cloud</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-1-2"></div>
+                </div>
+
+                <!-- Question 1.1.3 -->
+                <div class="quiz-question-box" id="qbox-1-3">
+                    <div class="quiz-q-num">QUESTION 3 OF 3</div>
+                    <div class="quiz-q-text">
+                        A tech startup is evaluating its infrastructure costs. What is the key financial difference between Capital Expenditure (CapEx) and Operational Expenditure (OpEx)?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('1-3', 'A')">
+                            <input type="radio" name="q_1_3" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">CapEx is ongoing operational spend on cloud services, while OpEx is upfront investment in hardware</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-3', 'B')">
+                            <input type="radio" name="q_1_3" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">CapEx requires upfront spending on physical assets that depreciate over time, whereas OpEx involves continuous payment for cloud services with no upfront purchase</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-3', 'C')">
+                            <input type="radio" name="q_1_3" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">CapEx applies only to Software as a Service, while OpEx applies only to On-Premises datacenters</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('1-3', 'D')">
+                            <input type="radio" name="q_1_3" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">CapEx provides immediate tax deduction benefits in the current accounting cycle</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-1-3"></div>
+                </div>
+
+                <div style="text-align: right; margin-top: 1.5rem;">
+                    <button type="submit" class="mark-btn" id="submit-btn-1">
+                        <span>Mark Subtopic 1.1 Answers</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+        </div> <!-- end subtopic-content-wrapper-1 -->
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SUBTOPIC 1.2: Describe the Benefits of Using Cloud Services               -->
+    <!-- ========================================================================= -->
+    <div id="subtopic-section-2" class="subtopic-container locked-container">
+        <!-- Completed Summary Card (Visible when finished/collapsed) -->
+        <div id="subtopic-completed-bar-2" class="subtopic-completed-bar" style="display: none;">
+            <div class="sc-left">
+                <div class="sc-check-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div>
+                    <div class="sc-badge">SUBTOPIC 1.2 COMPLETED</div>
+                    <h3 class="sc-title">Describe the Benefits of Using Cloud Services</h3>
+                    <p class="sc-sub">High availability, scalability, elasticity, reliability, manageability.</p>
+                </div>
+            </div>
+            <div class="sc-right">
+                <span class="sc-score" id="sc-score-2">Score: Passed</span>
+                <button type="button" class="sc-toggle-btn" onclick="toggleSubtopicReview(2)">
+                    <span id="sc-toggle-text-2">Review Material</span>
+                    <svg id="sc-toggle-arrow-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="subtopic-content-wrapper-2" class="subtopic-content-wrapper">
+        <!-- Locked overlay message -->
+        <div class="locked-overlay" id="locked-overlay-2">
+            <div class="locked-card">
+                <div class="locked-icon-wrapper">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h3>Subtopic 1.2 is Locked</h3>
+                <p>Complete and pass the Subtopic 1.1 Knowledge Check above to unlock the Benefits of Cloud Services.</p>
+            </div>
+        </div>
+
+        <div class="subtopic-header">
+            <span class="subtopic-tag">SUBTOPIC 1.2</span>
+            <h2>Describe the Benefits of Using Cloud Services</h2>
+            <p>Explore high availability, horizontal vs. vertical scalability, elasticity, reliability, predictability, security, governance, and cloud manageability.</p>
+        </div>
+
+        <div class="content-card">
+            <!-- 1. High Availability & Scalability -->
+            <div class="concept-block">
+                <div class="concept-header">
+                    <span class="concept-num">1</span>
+                    <h3>High Availability & Scalability</h3>
+                </div>
+                <p>
+                    Cloud platforms are engineered from the ground up to prevent downtime and scale dynamically with fluctuating user demand.
+                </p>
+
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="benefit-box">
+                        <div class="benefit-title">High Availability (HA)</div>
+                        <p style="margin: 0; color: var(--color-gray-700); font-size: 0.95rem; line-height: 1.5;">
+                            Focuses on ensuring maximum system uptime and eliminating Single Points of Failure (SPOF). Microsoft Azure guarantees high availability through automated failover across redundant power supplies, servers, Availability Zones, and regional datacenters backed by financially supported Service Level Agreements (SLAs like 99.9% to 99.99%).
+                        </p>
+                    </div>
+
+                    <div class="benefit-box">
+                        <div class="benefit-title">Scalability: Vertical vs. Horizontal</div>
+                        <div style="font-size: 0.95rem; color: var(--color-gray-700); line-height: 1.5;">
+                            <strong>Vertical Scaling (Scale Up / Scale Down):</strong> Adding more capacity (CPU cores, RAM, disk performance) to an <em>existing single virtual machine</em>. Like upgrading a vehicle's engine.
+                            <br><br>
+                            <strong>Horizontal Scaling (Scale Out / Scale In):</strong> Adding <em>additional virtual machine instances</em> side-by-side behind a load balancer to divide incoming traffic. Like hiring extra delivery vans during peak shipping season.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Elasticity Spotlight -->
+                <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-top: 1.25rem;">
+                    <div style="font-weight: 800; color: #166534; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 0.4rem;">
+                        KEY CONCEPT: ELASTICITY
+                    </div>
+                    <p style="margin: 0; color: #14532d; font-size: 0.95rem; line-height: 1.55;">
+                        <strong>Elasticity</strong> is the automated ability of cloud infrastructure to dynamically scale out additional servers when incoming user traffic spikes (e.g. during a Black Friday flash sale) and automatically deallocate those servers when traffic returns to normal. This ensures you never run out of capacity and never pay for idle servers.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2. Reliability & Predictability -->
+            <div class="concept-block">
+                <div class="concept-header">
+                    <span class="concept-num">2</span>
+                    <h3>Reliability & Predictability</h3>
+                </div>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div class="spec-card">
+                        <div class="spec-title">Reliability & Resilience</div>
+                        <p class="spec-desc">The ability of a system to recover from infrastructure disruptions and continue functioning seamlessly. Azure provides built-in decentralized architectures, automated backups, and cross-region disaster recovery (Azure Site Recovery) so single component failures do not bring down business operations.</p>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-title">Predictability (Cost & Performance)</div>
+                        <p class="spec-desc"><strong>Cost Predictability:</strong> Azure provides tools such as the Pricing Calculator and Cost Management Budgets to forecast and cap cloud expenditure.<br><strong>Performance Predictability:</strong> Dedicated compute tiers and autoscaling ensure uniform latency and steady response times for global users.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Security, Governance & Manageability -->
+            <div class="concept-block" style="border-bottom: none;">
+                <div class="concept-header">
+                    <span class="concept-num">3</span>
+                    <h3>Security, Governance & Manageability</h3>
+                </div>
+                <p>
+                    Enterprise compliance and fine-grained cloud management are built directly into Azure's global fabric.
+                </p>
+
+                <div class="grid-2" style="margin-top: 1.25rem;">
+                    <div class="spec-card">
+                        <div class="spec-title">Security & Governance</div>
+                        <ul class="clean-bullet-list">
+                            <li><strong>Physical Security:</strong> 24/7 armed surveillance, biometric access, and multi-factor perimeter security at every Microsoft datacenter.</li>
+                            <li><strong>Built-in Controls:</strong> Encryption at rest (AES-256), encryption in transit (TLS 1.3), and DDoS protection.</li>
+                            <li><strong>Azure Policy:</strong> Automated guardrails that enforce organizational standards (e.g., blocking deployments outside approved geographic regions).</li>
+                        </ul>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-title">Manageability: In vs. Of the Cloud</div>
+                        <ul class="clean-bullet-list">
+                            <li><strong>Management IN the Cloud:</strong> Actions performed by the customer (managing VMs, deploying web apps, configuring firewalls via Azure Portal, CLI, PowerShell, and Bicep/ARM).</li>
+                            <li><strong>Management OF the Cloud:</strong> Actions performed automatically by Microsoft (physical hardware upgrades, hypervisor kernel security patching, server rack cooling, power redundancy).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- KNOWLEDGE CHECK: SUBTOPIC 1.2 QUIZ                                -->
+        <!-- ================================================================= -->
+        <div class="quiz-panel">
+            <div class="quiz-panel-header">
+                <div>
+                    <span class="quiz-panel-badge">KNOWLEDGE CHECK</span>
+                    <h3 style="margin: 0.35rem 0 0 0; font-size: 1.35rem; color: var(--color-gray-900);">Subtopic 1.2 Understanding Assessment</h3>
+                    <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-600); font-size: 0.9rem;">
+                        Answer all 3 questions below. Score at least 2 out of 3 to unlock Subtopic 1.3!
+                    </p>
+                </div>
+                <div class="quiz-score-indicator" id="score-ind-2">Locked</div>
+            </div>
+
+            <form id="quiz-form-2" onsubmit="submitSubtopicQuiz(event, 2)">
+                <!-- Question 1.2.1 -->
+                <div class="quiz-question-box" id="qbox-2-1">
+                    <div class="quiz-q-num">QUESTION 1 OF 3</div>
+                    <div class="quiz-q-text">
+                        An online ticketing website experiences unexpected traffic surges whenever concert tickets go on sale. Azure automatically provisions 8 extra virtual machine instances when CPU utilization exceeds 75%, and automatically shuts them down when ticket sales end. Which cloud benefit is demonstrated here?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('2-1', 'A')">
+                            <input type="radio" name="q_2_1" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Vertical Scaling (Scaling Up)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-1', 'B')">
+                            <input type="radio" name="q_2_1" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Elasticity</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-1', 'C')">
+                            <input type="radio" name="q_2_1" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Management of the Cloud</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-1', 'D')">
+                            <input type="radio" name="q_2_1" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Capital Expenditure (CapEx)</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-2-1"></div>
+                </div>
+
+                <!-- Question 1.2.2 -->
+                <div class="quiz-question-box" id="qbox-2-2">
+                    <div class="quiz-q-num">QUESTION 2 OF 3</div>
+                    <div class="quiz-q-text">
+                        A systems engineer needs to handle higher database query workloads. The engineer modifies an Azure Virtual Machine size from Standard_B2s (2 vCPUs, 4 GB RAM) to Standard_B4ms (4 vCPUs, 16 GB RAM). What form of scaling was executed?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('2-2', 'A')">
+                            <input type="radio" name="q_2_2" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Horizontal Scaling (Scaling Out)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-2', 'B')">
+                            <input type="radio" name="q_2_2" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Vertical Scaling (Scaling Up)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-2', 'C')">
+                            <input type="radio" name="q_2_2" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Horizontal Scaling In</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-2', 'D')">
+                            <input type="radio" name="q_2_2" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Disaster Recovery Replication</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-2-2"></div>
+                </div>
+
+                <!-- Question 1.2.3 -->
+                <div class="quiz-question-box" id="qbox-2-3">
+                    <div class="quiz-q-num">QUESTION 3 OF 3</div>
+                    <div class="quiz-q-text">
+                        Which of the following operations represents "Management in the Cloud" rather than "Management of the Cloud"?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('2-3', 'A')">
+                            <input type="radio" name="q_2_3" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Replacing a defective physical SAN storage drive in an Azure datacenter</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-3', 'B')">
+                            <input type="radio" name="q_2_3" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Configuring an Azure Network Security Group (NSG) rule to restrict inbound web traffic</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-3', 'C')">
+                            <input type="radio" name="q_2_3" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Applying physical firmware patches to the underlying Azure hypervisor host server</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('2-3', 'D')">
+                            <input type="radio" name="q_2_3" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Servicing the air conditioning and cooling chillers inside an Azure datacenter</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-2-3"></div>
+                </div>
+
+                <div style="text-align: right; margin-top: 1.5rem;">
+                    <button type="submit" class="mark-btn" id="submit-btn-2">
+                        <span>Mark Subtopic 1.2 Answers</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+        </div> <!-- end subtopic-content-wrapper-2 -->
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SUBTOPIC 1.3: Describe Cloud Service Types                                -->
+    <!-- ========================================================================= -->
+    <div id="subtopic-section-3" class="subtopic-container locked-container">
+        <!-- Completed Summary Card (Visible when finished/collapsed) -->
+        <div id="subtopic-completed-bar-3" class="subtopic-completed-bar" style="display: none;">
+            <div class="sc-left">
+                <div class="sc-check-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div>
+                    <div class="sc-badge">SUBTOPIC 1.3 COMPLETED</div>
+                    <h3 class="sc-title">Describe Cloud Service Types</h3>
+                    <p class="sc-sub">IaaS, PaaS, SaaS, and architectural selection framework.</p>
+                </div>
+            </div>
+            <div class="sc-right">
+                <span class="sc-score" id="sc-score-3">Score: Passed</span>
+                <button type="button" class="sc-toggle-btn" onclick="toggleSubtopicReview(3)">
+                    <span id="sc-toggle-text-3">Review Material</span>
+                    <svg id="sc-toggle-arrow-3" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="subtopic-content-wrapper-3" class="subtopic-content-wrapper">
+        <!-- Locked overlay message -->
+        <div class="locked-overlay" id="locked-overlay-3">
+            <div class="locked-card">
+                <div class="locked-icon-wrapper">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h3>Subtopic 1.3 is Locked</h3>
+                <p>Complete and pass the Subtopic 1.2 Knowledge Check above to unlock Cloud Service Types.</p>
+            </div>
+        </div>
+
+        <div class="subtopic-header">
+            <span class="subtopic-tag">SUBTOPIC 1.3</span>
+            <h2>Describe Cloud Service Types</h2>
+            <p>Master Infrastructure as a Service (IaaS), Platform as a Service (PaaS), Software as a Service (SaaS), and architectural decision use cases.</p>
+        </div>
+
+        <div class="content-card">
+            <!-- 1. IaaS, PaaS, and SaaS Deep Dive -->
+            <div class="concept-block">
+                <div class="concept-header">
+                    <span class="concept-num">1</span>
+                    <h3>The Three Primary Cloud Service Models</h3>
+                </div>
+
+                <div class="grid-3" style="margin-top: 1.25rem;">
+                    <!-- IaaS -->
+                    <div class="service-model-card">
+                        <div class="service-model-tag" style="background: #2563eb;">IaaS</div>
+                        <h4 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.15rem; color: #1e3a8a;">Infrastructure as a Service</h4>
+                        <div style="font-size: 0.825rem; font-weight: 700; color: #64748b; margin-bottom: 0.75rem;">MAXIMUM CONTROL</div>
+                        <p style="font-size: 0.9rem; color: #334155; line-height: 1.5; margin-bottom: 0.75rem;">
+                            Renting raw virtualized hardware: Virtual Machines (VMs), storage disks, and virtual networks. You are in complete control of the operating system, installed middleware, software configurations, and security patching.
+                        </p>
+                        <div style="background: #eff6ff; padding: 0.6rem 0.8rem; border-radius: 0.5rem; font-size: 0.85rem; color: #1e40af;">
+                            <strong>Azure Examples:</strong> Azure Virtual Machines, Azure Virtual Network, Azure Blob Storage Disks.
+                        </div>
+                    </div>
+
+                    <!-- PaaS -->
+                    <div class="service-model-card">
+                        <div class="service-model-tag" style="background: #0d9488;">PaaS</div>
+                        <h4 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.15rem; color: #115e59;">Platform as a Service</h4>
+                        <div style="font-size: 0.825rem; font-weight: 700; color: #64748b; margin-bottom: 0.75rem;">DEVELOPER AGILITY</div>
+                        <p style="font-size: 0.9rem; color: #334155; line-height: 1.5; margin-bottom: 0.75rem;">
+                            A fully managed deployment environment. Microsoft manages the hardware, operating system, and runtime stack. Developers focus 100% on writing application code, APIs, and business logic without server maintenance.
+                        </p>
+                        <div style="background: #f0fdfa; padding: 0.6rem 0.8rem; border-radius: 0.5rem; font-size: 0.85rem; color: #134e4a;">
+                            <strong>Azure Examples:</strong> Azure App Service, Azure SQL Database, Azure Functions (Serverless).
+                        </div>
+                    </div>
+
+                    <!-- SaaS -->
+                    <div class="service-model-card">
+                        <div class="service-model-tag" style="background: #7c3aed;">SaaS</div>
+                        <h4 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.15rem; color: #5b21b6;">Software as a Service</h4>
+                        <div style="font-size: 0.825rem; font-weight: 700; color: #64748b; margin-bottom: 0.75rem;">END-USER APPLICATION</div>
+                        <p style="font-size: 0.9rem; color: #334155; line-height: 1.5; margin-bottom: 0.75rem;">
+                            A complete, end-user software application hosted, managed, and maintained entirely by the cloud provider. Users simply connect over the web browser or mobile app. Zero infrastructure or code maintenance.
+                        </p>
+                        <div style="background: #f5f3ff; padding: 0.6rem 0.8rem; border-radius: 0.5rem; font-size: 0.85rem; color: #4c1d95;">
+                            <strong>Examples:</strong> Microsoft 365 (Word, Excel, Outlook), Microsoft Teams, Dynamics 365, OneDrive.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Real-World Decision Matrix & Use Cases -->
+            <div class="concept-block" style="border-bottom: none;">
+                <div class="concept-header">
+                    <span class="concept-num">2</span>
+                    <h3>Service Model Decision Framework</h3>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid var(--color-gray-200); border-radius: 0.75rem; overflow: hidden; margin-top: 1rem;">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Technical Requirement / Scenario</th>
+                                <th>Recommended Model</th>
+                                <th>Primary Architectural Rationale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Migrating legacy on-premises applications requiring direct OS registry edits ("Lift and Shift")</td>
+                                <td><span class="badge" style="background: #dbeafe; color: #1e40af;">IaaS</span></td>
+                                <td>Gives complete administrative access to the underlying OS configuration.</td>
+                            </tr>
+                            <tr>
+                                <td>Building a modern web application or mobile REST API with automatic scaling and zero OS patching overhead</td>
+                                <td><span class="badge" style="background: #ccfbf1; color: #0f766e;">PaaS</span></td>
+                                <td>Frees engineers to write code while Azure manages runtime, OS, and server patches.</td>
+                            </tr>
+                            <tr>
+                                <td>Deploying corporate email, real-time team messaging, and shared document spreadsheets</td>
+                                <td><span class="badge" style="background: #ede9fe; color: #5b21b6;">SaaS</span></td>
+                                <td>Turnkey end-user software requiring zero development or server management.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- KNOWLEDGE CHECK: SUBTOPIC 1.3 QUIZ                                -->
+        <!-- ================================================================= -->
+        <div class="quiz-panel">
+            <div class="quiz-panel-header">
+                <div>
+                    <span class="quiz-panel-badge">KNOWLEDGE CHECK</span>
+                    <h3 style="margin: 0.35rem 0 0 0; font-size: 1.35rem; color: var(--color-gray-900);">Subtopic 1.3 Understanding Assessment</h3>
+                    <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-600); font-size: 0.9rem;">
+                        Answer all 3 questions below to achieve full Domain 1 Mastery!
+                    </p>
+                </div>
+                <div class="quiz-score-indicator" id="score-ind-3">Locked</div>
+            </div>
+
+            <form id="quiz-form-3" onsubmit="submitSubtopicQuiz(event, 3)">
+                <!-- Question 1.3.1 -->
+                <div class="quiz-question-box" id="qbox-3-1">
+                    <div class="quiz-q-num">QUESTION 1 OF 3</div>
+                    <div class="quiz-q-text">
+                        A startup software team wants to build a new Node.js web application. The team wants Microsoft to manage the underlying operating system, server hardware, and runtime patches so that the developers can focus purely on coding and application deployment. Which cloud service model should they choose?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('3-1', 'A')">
+                            <input type="radio" name="q_3_1" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Infrastructure as a Service (IaaS)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-1', 'B')">
+                            <input type="radio" name="q_3_1" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Platform as a Service (PaaS)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-1', 'C')">
+                            <input type="radio" name="q_3_1" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Software as a Service (SaaS)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-1', 'D')">
+                            <input type="radio" name="q_3_1" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">On-Premises Bare Metal Hosting</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-3-1"></div>
+                </div>
+
+                <!-- Question 1.3.2 -->
+                <div class="quiz-question-box" id="qbox-3-2">
+                    <div class="quiz-q-num">QUESTION 2 OF 3</div>
+                    <div class="quiz-q-text">
+                        An enterprise organization is migrating an old accounting application to Azure. The application requires direct Administrator access to the Windows Server operating system, specific custom device drivers, and low-level registry settings. Which service model is required?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('3-2', 'A')">
+                            <input type="radio" name="q_3_2" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Software as a Service (SaaS)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-2', 'B')">
+                            <input type="radio" name="q_3_2" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Platform as a Service (PaaS)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-2', 'C')">
+                            <input type="radio" name="q_3_2" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Infrastructure as a Service (IaaS)</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-2', 'D')">
+                            <input type="radio" name="q_3_2" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Serverless Logic Apps</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-3-2"></div>
+                </div>
+
+                <!-- Question 1.3.3 -->
+                <div class="quiz-question-box" id="qbox-3-3">
+                    <div class="quiz-q-num">QUESTION 3 OF 3</div>
+                    <div class="quiz-q-text">
+                        Which of the following products is an example of Software as a Service (SaaS)?
+                    </div>
+                    <div class="quiz-options">
+                        <label class="quiz-option-label" onclick="selectOption('3-3', 'A')">
+                            <input type="radio" name="q_3_3" value="A">
+                            <span class="opt-key">A</span>
+                            <span class="opt-text">Microsoft 365 and Microsoft Teams accessed via a web browser</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-3', 'B')">
+                            <input type="radio" name="q_3_3" value="B">
+                            <span class="opt-key">B</span>
+                            <span class="opt-text">Azure Virtual Machines running Linux Ubuntu</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-3', 'C')">
+                            <input type="radio" name="q_3_3" value="C">
+                            <span class="opt-key">C</span>
+                            <span class="opt-text">Azure Virtual Network subnets and routing tables</span>
+                        </label>
+                        <label class="quiz-option-label" onclick="selectOption('3-3', 'D')">
+                            <input type="radio" name="q_3_3" value="D">
+                            <span class="opt-key">D</span>
+                            <span class="opt-text">Azure SQL Database serverless elastic pool</span>
+                        </label>
+                    </div>
+                    <div class="feedback-box" id="fb-3-3"></div>
+                </div>
+
+                <div style="text-align: right; margin-top: 1.5rem;">
+                    <button type="submit" class="mark-btn" id="submit-btn-3">
+                        <span>Mark Subtopic 1.3 Answers</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+        </div> <!-- end subtopic-content-wrapper-3 -->
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- DOMAIN 1 COMPLETION CERTIFICATE / MASTERY PANEL                           -->
+    <!-- ========================================================================= -->
+    <div id="domain-mastery-panel" style="display: none; background: white; border-radius: 1rem; padding: 2.5rem; border: 2px solid #10b981; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1); text-align: center; margin-top: 3rem;">
+        <div style="width: 70px; height: 70px; background: #ecfdf5; border: 2px solid #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: #059669;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        </div>
+        <span style="background: #10b981; color: white; font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 999px; letter-spacing: 0.5px;">DOMAIN 1 MASTERY CONFIRMED</span>
+        <h2 style="font-size: 2rem; color: #065f46; margin: 0.75rem 0 0.5rem 0; font-weight: 800;">Congratulations! You Mastered Cloud Concepts!</h2>
+        <p style="color: var(--color-gray-600); max-width: 650px; margin: 0 auto 1.75rem; line-height: 1.6;">
+            You have successfully completed all subtopics and knowledge checks for AZ-900 Domain 1 (Describe Cloud Concepts). You have earned this milestone on your path to Azure Fundamentals certification!
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('generate_quiz', topic_id='az900') }}" class="btn btn-primary" style="padding: 0.85rem 1.75rem; font-weight: 700;">
+                Take Full AZ-900 Practice Exam
+            </a>
+            <a href="{{ url_for('topic_detail', topic_id='az900') }}" class="btn btn-secondary" style="padding: 0.85rem 1.75rem;">
+                Return to Course Overview
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- FLOATING AI STUDY BUDDY CHAT UI (SLIDE-OUT RIGHT PANEL)                  -->
+<!-- ========================================================================= -->
+<!-- Floating Action Button -->
+<button id="ai-chat-fab" class="ai-chat-fab" onclick="toggleChatPanel()" title="Ask AI Study Buddy">
+    <div class="fab-pulse"></div>
+    <div class="fab-content">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span class="fab-badge">AI</span>
+    </div>
+</button>
+
+<!-- Backdrop Overlay for Mobile -->
+<div id="ai-chat-overlay" class="ai-chat-overlay" onclick="toggleChatPanel()"></div>
+
+<!-- Slide-out Side Panel -->
+<div id="ai-chat-drawer" class="ai-chat-drawer">
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="drawer-avatar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                    <circle cx="12" cy="5" r="2"></circle>
+                    <path d="M12 7v4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #ffffff;">AZ-900 Study Buddy</h3>
+                <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: #93c5fd;">
+                    <span class="online-dot"></span>
+                    <span id="chat-active-subtopic-tag">Focus: Cloud Concepts</span>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="drawer-close-btn" onclick="toggleChatPanel()" aria-label="Close Chat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    </div>
+
+    <!-- Chat Messages Scroll Area -->
+    <div id="chat-messages-container" class="drawer-messages">
+        <!-- Welcome intro bubble -->
+        <div class="chat-bubble ai">
+            <div class="bubble-sender">AI Study Buddy</div>
+            <div class="bubble-text">
+                Hello! I am your AZ-900 Study Buddy. Ask me any question about <strong>Cloud Concepts</strong>, the <strong>Shared Responsibility Model</strong>, or <strong>IaaS / PaaS / SaaS</strong>!
+            </div>
+        </div>
+
+        <!-- Suggestion Chips -->
+        <div id="chat-suggestions" class="chat-suggestions-box">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; letter-spacing: 0.5px;">SUGGESTED EXAM QUESTIONS</div>
+            <div class="suggestions-grid">
+                <button type="button" class="chip-btn" onclick="askSuggested('What is the Shared Responsibility Model in Azure?')">
+                    Shared Responsibility Model
+                </button>
+                <button type="button" class="chip-btn" onclick="askSuggested('Explain the difference between IaaS, PaaS, and SaaS with Azure examples')">
+                    IaaS vs PaaS vs SaaS
+                </button>
+                <button type="button" class="chip-btn" onclick="askSuggested('What is the difference between CapEx and OpEx in cloud economics?')">
+                    CapEx vs OpEx
+                </button>
+                <button type="button" class="chip-btn" onclick="askSuggested('What is elasticity vs scalability in Azure?')">
+                    Elasticity vs Scalability
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Input Area -->
+    <form id="drawer-chat-form" onsubmit="handleSendChat(event)" class="drawer-input-bar">
+        <input 
+            type="text" 
+            id="drawer-chat-input" 
+            placeholder="Ask anything about AZ-900..." 
+            autocomplete="off" 
+            required 
+        />
+        <button type="submit" id="drawer-send-btn" class="drawer-send-btn" aria-label="Send message">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+    </form>
+</div>
+
+<style>
+/* Modern typography and components - NO EMOJIS */
+.subtopic-container {
+    margin-bottom: 3.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.subtopic-container.locked-container {
+    opacity: 0.55;
+    pointer-events: none;
+    user-select: none;
+}
+
+.locked-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(248, 250, 252, 0.85);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    border-radius: 1rem;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+.subtopic-container.locked-container .locked-overlay {
+    display: flex;
+}
+
+.locked-card {
+    background: white;
+    border: 1px solid var(--color-gray-300);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    max-width: 440px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.locked-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.locked-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--color-gray-900);
+    font-size: 1.25rem;
+}
+
+.locked-card p {
+    margin: 0;
+    color: var(--color-gray-600);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.subtopic-header {
+    margin-bottom: 1.25rem;
+}
+
+.subtopic-tag {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.375rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.4rem;
+}
+
+.subtopic-header h2 {
+    font-size: 1.65rem;
+    color: var(--color-gray-900);
+    margin: 0 0 0.35rem 0;
+    font-weight: 800;
+}
+
+.subtopic-header p {
+    color: var(--color-gray-600);
+    margin: 0;
+    font-size: 1rem;
+}
+
+.content-card {
+    background: white;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-gray-200);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    padding: 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.concept-block {
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.concept-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.concept-num {
+    width: 28px;
+    height: 28px;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 800;
+    font-size: 0.85rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.concept-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: var(--color-gray-900);
+    font-weight: 700;
+}
+
+.analogy-box {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1.25rem 0;
+}
+
+.analogy-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #1d4ed8;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.pill-card {
+    background: #f8fafc;
+    border: 1px solid var(--color-gray-200);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.pill-title {
+    font-weight: 700;
+    color: var(--color-gray-900);
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.pill-desc {
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+    line-height: 1.4;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.modern-table th {
+    background: #f8fafc;
+    color: var(--color-gray-700);
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.modern-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+
+.modern-table tr:last-child td {
+    border-bottom: none;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-customer {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-microsoft {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-shared {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.exam-tip-box {
+    background: #fefce8;
+    border: 1px solid #fde047;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    color: #854d0e;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    margin-top: 1.25rem;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.spec-card {
+    background: #f8fafc;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+}
+
+.spec-title {
+    font-weight: 700;
+    color: var(--color-gray-900);
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+}
+
+.spec-desc {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.spec-bullet {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+.pricing-card {
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid;
+}
+
+.pricing-card.capex {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.pricing-card.opex {
+    background: #f0f9ff;
+    border-color: #7dd3fc;
+}
+
+.pricing-badge {
+    display: inline-block;
+    background: #475569;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.pricing-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-gray-900);
+    margin-bottom: 0.75rem;
+}
+
+.pricing-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--color-gray-700);
+    line-height: 1.55;
+}
+
+.pricing-list li {
+    margin-bottom: 0.4rem;
+}
+
+.benefit-box {
+    background: #f8fafc;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+}
+
+.benefit-title {
+    font-weight: 800;
+    color: var(--color-gray-900);
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.clean-bullet-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.9rem;
+    color: var(--color-gray-700);
+    line-height: 1.55;
+}
+
+.clean-bullet-list li {
+    margin-bottom: 0.5rem;
+}
+
+.service-model-card {
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.service-model-tag {
+    display: inline-block;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.35rem;
+}
+
+/* Stepper styles */
+.step-nav-card {
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.step-nav-card.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+.step-nav-card.completed {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.step-nav-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.step-indicator {
+    width: 22px;
+    height: 22px;
+    background: var(--color-gray-300);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.step-nav-card.active .step-indicator {
+    background: #3b82f6;
+}
+
+.step-nav-card.completed .step-indicator {
+    background: #10b981;
+}
+
+.step-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-gray-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.step-status {
+    font-size: 0.75rem;
+    color: var(--color-gray-500);
+    margin-left: 1.85rem;
+}
+
+.step-nav-card.completed .step-status {
+    color: #059669;
+    font-weight: 600;
+}
+
+/* Quiz Panel Styles */
+.quiz-panel {
+    background: #ffffff;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.quiz-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.quiz-panel-badge {
+    background: var(--color-gray-900);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.35rem;
+    letter-spacing: 0.5px;
+}
+
+.quiz-score-indicator {
+    background: var(--color-gray-100);
+    color: var(--color-gray-700);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.5rem;
+}
+
+.quiz-score-indicator.passed {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #86efac;
+}
+
+.quiz-score-indicator.failed {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
+
+.quiz-question-box {
+    background: #f8fafc;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.65rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.quiz-question-box.is-correct {
+    border-color: #86efac;
+    background: #f0fdf4;
+}
+
+.quiz-question-box.is-incorrect {
+    border-color: #fca5a5;
+    background: #fef2f2;
+}
+
+.quiz-q-num {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.5px;
+}
+
+.quiz-q-text {
+    font-weight: 700;
+    color: var(--color-gray-900);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.quiz-options {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.quiz-option-label {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.quiz-option-label:hover {
+    border-color: var(--color-primary);
+    background: #f8faff;
+}
+
+.quiz-option-label input[type="radio"] {
+    display: none;
+}
+
+.opt-key {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--color-gray-300);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-gray-700);
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.quiz-option-label.selected {
+    border-color: var(--color-primary);
+    background: #eff6ff;
+}
+
+.quiz-option-label.selected .opt-key {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.quiz-option-label.correct-choice {
+    border-color: #10b981 !important;
+    background: #ecfdf5 !important;
+}
+
+.quiz-option-label.correct-choice .opt-key {
+    background: #10b981 !important;
+    color: white !important;
+    border-color: #10b981 !important;
+}
+
+.quiz-option-label.wrong-choice {
+    border-color: #ef4444 !important;
+    background: #fef2f2 !important;
+}
+
+.quiz-option-label.wrong-choice .opt-key {
+    background: #ef4444 !important;
+    color: white !important;
+    border-color: #ef4444 !important;
+}
+
+.opt-text {
+    font-size: 0.95rem;
+    color: var(--color-gray-800);
+    line-height: 1.45;
+}
+
+.feedback-box {
+    display: none;
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.925rem;
+    line-height: 1.55;
+}
+
+.feedback-box.correct {
+    background: #ecfdf5;
+    border: 1px solid #86efac;
+    color: #065f46;
+}
+
+.feedback-box.incorrect {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+
+.feedback-title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+}
+
+.mark-btn {
+    background: #0078d4;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.85rem 1.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.mark-btn:hover {
+    background: #0063b1;
+}
+
+.mark-btn:disabled {
+    background: var(--color-gray-300);
+    cursor: not-allowed;
+}
+
+/* ========================================================================= */
+/* COLLAPSIBLE COMPLETED SUMMARY BAR STYLES                                  */
+/* ========================================================================= */
+.subtopic-content-wrapper {
+    transition: all 0.35s ease;
+}
+
+.subtopic-completed-bar {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 2px solid #86efac;
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+    transition: all 0.25s ease;
+}
+
+.subtopic-completed-bar:hover {
+    border-color: #34d399;
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.14);
+}
+
+.sc-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sc-check-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #10b981;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.sc-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #047857;
+    margin-bottom: 0.15rem;
+}
+
+.sc-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #065f46;
+}
+
+.sc-sub {
+    margin: 0.2rem 0 0 0;
+    font-size: 0.85rem;
+    color: #047857;
+}
+
+.sc-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.sc-score {
+    background: #dcfce7;
+    color: #166534;
+    font-weight: 700;
+    font-size: 0.825rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #86efac;
+}
+
+.sc-toggle-btn {
+    background: white;
+    color: #065f46;
+    border: 1.5px solid #a7f3d0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.45rem 0.9rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.sc-toggle-btn:hover {
+    background: #059669;
+    color: white;
+    border-color: #059669;
+}
+
+.sc-toggle-btn svg {
+    transition: transform 0.25s ease;
+}
+
+.sc-toggle-btn.expanded svg {
+    transform: rotate(180deg);
+}
+
+/* ========================================================================= */
+/* FLOATING AI STUDY BUDDY CHAT STYLES                                      */
+/* ========================================================================= */
+.ai-chat-fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0078d4, #005a9e);
+    border: none;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 120, 212, 0.45);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ai-chat-fab:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 120, 212, 0.55);
+}
+
+.fab-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #0078d4;
+    opacity: 0.6;
+    animation: fabRipple 2.2s infinite ease-out;
+    pointer-events: none;
+}
+
+@keyframes fabRipple {
+    0% { transform: scale(1); opacity: 0.6; }
+    70% { transform: scale(1.45); opacity: 0; }
+    100% { transform: scale(1.45); opacity: 0; }
+}
+
+.fab-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fab-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #10b981;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.15rem 0.35rem;
+    border-radius: 999px;
+    border: 2px solid white;
+}
+
+/* Backdrop Overlay */
+.ai-chat-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.ai-chat-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Drawer / Panel */
+.ai-chat-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 430px;
+    max-width: 92vw;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(105%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-chat-drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    flex-shrink: 0;
+}
+
+.drawer-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #0078d4;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.online-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+}
+
+.drawer-close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 0.35rem;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.drawer-close-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.drawer-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #f8fafc;
+}
+
+.chat-bubble {
+    max-width: 85%;
+    padding: 0.85rem 1.1rem;
+    border-radius: 1rem;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    word-break: break-word;
+    animation: bubbleIn 0.2s ease-out;
+}
+
+@keyframes bubbleIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-bubble.user {
+    align-self: flex-end;
+    background: #0078d4;
+    color: #ffffff;
+    border-bottom-right-radius: 0.25rem;
+    box-shadow: 0 2px 6px rgba(0, 120, 212, 0.2);
+}
+
+.chat-bubble.ai {
+    align-self: flex-start;
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 0.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.bubble-sender {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #0078d4;
+    letter-spacing: 0.4px;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+
+.chat-bubble.user .bubble-sender {
+    display: none;
+}
+
+.chat-bubble code {
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.85em;
+    font-family: monospace;
+}
+
+.chat-bubble.user code {
+    background: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.5rem 0.25rem;
+}
+
+.typing-dot {
+    width: 7px;
+    height: 7px;
+    background: #94a3b8;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40% { transform: translateY(-6px); opacity: 1; }
+}
+
+.chat-suggestions-box {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px dashed #cbd5e1;
+}
+
+.suggestions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.chip-btn {
+    text-align: left;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.chip-btn:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    transform: translateX(3px);
+}
+
+.drawer-input-bar {
+    padding: 0.9rem 1.15rem;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.drawer-input-bar input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.65rem;
+    font-size: 0.925rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.drawer-input-bar input:focus {
+    border-color: #0078d4;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.12);
+}
+
+.drawer-send-btn {
+    background: #0078d4;
+    color: white;
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.drawer-send-btn:hover {
+    background: #0063b1;
+}
+
+.drawer-send-btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+    .sc-left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .sc-right {
+        margin-top: 0.75rem;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .ai-chat-drawer {
+        width: 100vw;
+        max-width: 100vw;
+    }
+}
+</style>
+
+<!-- ========================================================================= -->
+<!-- JAVASCRIPT: Logic, Locking, Quiz Evaluation, Audio & Fireworks            -->
+<!-- ========================================================================= -->
+<script>
+// Answers and detailed rationale database
+const QUIZ_ANSWER_KEY = {
+    '1-1': {
+        correct: 'B',
+        explanation: 'Data classification, accounts, user credentials, and endpoints remain 100% the customer\'s responsibility across all cloud models (IaaS, PaaS, SaaS, and On-Premises). Microsoft never owns your data or user passwords.',
+        wrongRationale: 'A is Microsoft\'s physical security duty; C is managed by Microsoft across all public cloud services; D is managed by Microsoft in PaaS and SaaS (only customer patches OS in IaaS).'
+    },
+    '1-2': {
+        correct: 'C',
+        explanation: 'Hybrid Cloud connects an on-premises private datacenter with public cloud resources (like Azure), allowing sensitive data to remain on-premises while taking advantage of public cloud compute and analytics.',
+        wrongRationale: 'Public Cloud would mean all resources are in Azure; Private Cloud would mean zero public cloud usage; Multi-Cloud refers to using multiple distinct public cloud vendors (e.g., Azure + AWS).'
+    },
+    '1-3': {
+        correct: 'B',
+        explanation: 'CapEx requires large upfront cash investments in physical servers, real estate, and hardware that depreciates over years. OpEx is the consumption-based cloud model where you pay continuously for active services with no upfront capital purchase.',
+        wrongRationale: 'A reverses the definitions; C is false because SaaS is OpEx; D is incorrect because CapEx is depreciated over years rather than immediately deducted.'
+    },
+    '2-1': {
+        correct: 'B',
+        explanation: 'Elasticity is the automated capability of cloud systems to provision extra servers dynamically during demand peaks and deallocate them automatically when traffic returns to normal.',
+        wrongRationale: 'A (Vertical Scaling) means resizing a single machine rather than adding multiple instances; C is Microsoft\'s internal maintenance; D is traditional upfront spending.'
+    },
+    '2-2': {
+        correct: 'B',
+        explanation: 'Vertical scaling (scaling up) means upgrading the processing power (vCPU, RAM, or disk speed) of an existing single virtual machine instance.',
+        wrongRationale: 'A (Horizontal scaling) involves adding more server instances rather than resizing one; C is removing instances; D is disaster recovery replication.'
+    },
+    '2-3': {
+        correct: 'B',
+        explanation: 'Configuring a Network Security Group (NSG) rule is an action performed by the customer on their own cloud resources ("Management IN the Cloud").',
+        wrongRationale: 'A, C, and D are all "Management OF the Cloud"—the physical datacenter, hardware, and hypervisor maintenance performed exclusively by Microsoft.'
+    },
+    '3-1': {
+        correct: 'B',
+        explanation: 'PaaS (Platform as a Service, such as Azure App Service) abstracts the operating system, hardware, and runtime patching, enabling software developers to focus purely on coding and application deployment.',
+        wrongRationale: 'A (IaaS) requires the customer to configure and patch the OS; C (SaaS) is a finished end-user product like M365 rather than a code execution platform; D is on-premises.'
+    },
+    '3-2': {
+        correct: 'C',
+        explanation: 'IaaS (such as Azure Virtual Machines) provides direct administrative control over the operating system, allowing custom device drivers, registry tweaks, and legacy OS configurations.',
+        wrongRationale: 'A and B abstract away administrative OS access; D (Logic Apps) is a serverless orchestration workflow tool without an accessible OS.'
+    },
+    '3-3': {
+        correct: 'A',
+        explanation: 'Microsoft 365 and Microsoft Teams are SaaS applications. The vendor delivers a complete end-user product accessed via web browser or app, requiring zero infrastructure or runtime management from the customer.',
+        wrongRationale: 'B is IaaS; C is IaaS networking; D is a PaaS database offering.'
+    }
+};
+
+// State tracker
+let progressState = {
+    subtopic_1: false,
+    subtopic_2: false,
+    subtopic_3: false,
+    scores: { 1: null, 2: null, 3: null },
+    expanded: { 1: false, 2: false, 3: false }
+};
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadProgress();
+    updateUIProgression();
+    updateChatContext();
+});
+
+function loadProgress() {
+    try {
+        const saved = localStorage.getItem('az900_domain1_progress');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            progressState = {
+                ...progressState,
+                ...parsed,
+                scores: { ...progressState.scores, ...(parsed.scores || {}) },
+                expanded: { ...progressState.expanded, ...(parsed.expanded || {}) }
+            };
+        }
+    } catch(e) {
+        console.warn('Could not load localStorage progress:', e);
+    }
+}
+
+function saveProgress() {
+    try {
+        localStorage.setItem('az900_domain1_progress', JSON.stringify(progressState));
+    } catch(e) {
+        console.warn('Could not save localStorage progress:', e);
+    }
+
+    // Also sync to server session
+    fetch('/api/az900/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(progressState)
+    }).catch(e => console.log('Server sync status:', e));
+}
+
+function resetModuleProgress() {
+    if (confirm('Are you sure you want to reset your Domain 1 progress and test yourself again from the beginning?')) {
+        progressState = {
+            subtopic_1: false,
+            subtopic_2: false,
+            subtopic_3: false,
+            scores: { 1: null, 2: null, 3: null },
+            expanded: { 1: false, 2: false, 3: false }
+        };
+        saveProgress();
+        window.location.reload();
+    }
+}
+
+function toggleSubtopicReview(num) {
+    progressState.expanded[num] = !progressState.expanded[num];
+    applyCollapsibleState(num);
+    saveProgress();
+}
+
+function applyCollapsibleState(num) {
+    const bar = document.getElementById(`subtopic-completed-bar-${num}`);
+    const wrapper = document.getElementById(`subtopic-content-wrapper-${num}`);
+    const toggleBtn = bar ? bar.querySelector('.sc-toggle-btn') : null;
+    const toggleText = document.getElementById(`sc-toggle-text-${num}`);
+    const scoreBadge = document.getElementById(`sc-score-${num}`);
+
+    if (!bar || !wrapper) return;
+
+    const isCompleted = progressState[`subtopic_${num}`];
+
+    if (isCompleted) {
+        bar.style.display = 'flex';
+        const score = progressState.scores && progressState.scores[num];
+        if (score && scoreBadge) {
+            scoreBadge.textContent = `Score: ${score}/3 Passed`;
+        }
+
+        const isExpanded = progressState.expanded && progressState.expanded[num];
+        if (isExpanded) {
+            wrapper.style.display = 'block';
+            if (toggleBtn) toggleBtn.classList.add('expanded');
+            if (toggleText) toggleText.textContent = 'Hide Review';
+        } else {
+            wrapper.style.display = 'none';
+            if (toggleBtn) toggleBtn.classList.remove('expanded');
+            if (toggleText) toggleText.textContent = 'Review Material';
+        }
+    } else {
+        bar.style.display = 'none';
+        wrapper.style.display = 'block';
+    }
+}
+
+function updateUIProgression() {
+    let completedCount = 0;
+    if (progressState.subtopic_1) completedCount++;
+    if (progressState.subtopic_2) completedCount++;
+    if (progressState.subtopic_3) completedCount++;
+
+    const percent = Math.round((completedCount / 3) * 100);
+    document.getElementById('domain-progress-bar').style.width = percent + '%';
+    document.getElementById('progress-percent-label').textContent = percent + '% Completed';
+
+    // Apply collapsible visibility for each subtopic
+    applyCollapsibleState(1);
+    applyCollapsibleState(2);
+    applyCollapsibleState(3);
+
+    // Step 1 UI
+    const nav1 = document.getElementById('step-nav-1');
+    const badge1 = document.getElementById('step-badge-1');
+    const status1 = document.getElementById('step-status-1');
+    if (progressState.subtopic_1) {
+        nav1.classList.add('completed');
+        status1.textContent = 'Completed (Passed)';
+        badge1.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    }
+
+    // Step 2 UI & Lock
+    const sec2 = document.getElementById('subtopic-section-2');
+    const nav2 = document.getElementById('step-nav-2');
+    const badge2 = document.getElementById('step-badge-2');
+    const status2 = document.getElementById('step-status-2');
+    const scoreInd2 = document.getElementById('score-ind-2');
+
+    if (progressState.subtopic_1) {
+        sec2.classList.remove('locked-container');
+        nav2.classList.remove('locked');
+        if (progressState.subtopic_2) {
+            nav2.classList.add('completed');
+            status2.textContent = 'Completed (Passed)';
+            badge2.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        } else {
+            nav2.classList.add('active');
+            status2.textContent = 'In Progress';
+            badge2.textContent = '1.2';
+            scoreInd2.textContent = 'Ready';
+            scoreInd2.classList.remove('locked');
+        }
+    } else {
+        sec2.classList.add('locked-container');
+        nav2.classList.add('locked');
+        nav2.classList.remove('active', 'completed');
+        status2.textContent = 'Locked';
+        badge2.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+    }
+
+    // Step 3 UI & Lock
+    const sec3 = document.getElementById('subtopic-section-3');
+    const nav3 = document.getElementById('step-nav-3');
+    const badge3 = document.getElementById('step-badge-3');
+    const status3 = document.getElementById('step-status-3');
+    const scoreInd3 = document.getElementById('score-ind-3');
+
+    if (progressState.subtopic_2) {
+        sec3.classList.remove('locked-container');
+        nav3.classList.remove('locked');
+        if (progressState.subtopic_3) {
+            nav3.classList.add('completed');
+            status3.textContent = 'Completed (Passed)';
+            badge3.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        } else {
+            nav3.classList.add('active');
+            status3.textContent = 'In Progress';
+            badge3.textContent = '1.3';
+            scoreInd3.textContent = 'Ready';
+            scoreInd3.classList.remove('locked');
+        }
+    } else {
+        sec3.classList.add('locked-container');
+        nav3.classList.add('locked');
+        nav3.classList.remove('active', 'completed');
+        status3.textContent = 'Locked';
+        badge3.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+    }
+
+    // Domain Mastery Certificate
+    if (progressState.subtopic_3) {
+        document.getElementById('domain-mastery-panel').style.display = 'block';
+    }
+
+    updateChatContext();
+}
+
+function navigateToSubtopic(num) {
+    if (num === 2 && !progressState.subtopic_1) {
+        alert('Please complete and pass the Subtopic 1.1 Knowledge Check first!');
+        return;
+    }
+    if (num === 3 && !progressState.subtopic_2) {
+        alert('Please complete and pass the Subtopic 1.2 Knowledge Check first!');
+        return;
+    }
+    const target = document.getElementById(`subtopic-section-${num}`);
+    if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function selectOption(qKey, value) {
+    const parentBox = document.getElementById(`qbox-${qKey}`);
+    if (!parentBox) return;
+
+    // Clear previous selection
+    parentBox.querySelectorAll('.quiz-option-label').forEach(label => {
+        label.classList.remove('selected');
+    });
+
+    // Select chosen label
+    const selectedInput = parentBox.querySelector(`input[value="${value}"]`);
+    if (selectedInput) {
+        selectedInput.checked = true;
+        selectedInput.closest('.quiz-option-label').classList.add('selected');
+    }
+}
+
+function submitSubtopicQuiz(event, subtopicNum) {
+    event.preventDefault();
+
+    const qKeys = [
+        `${subtopicNum}-1`,
+        `${subtopicNum}-2`,
+        `${subtopicNum}-3`
+    ];
+
+    let correctCount = 0;
+    let answeredAll = true;
+
+    // Check that all 3 are answered
+    qKeys.forEach(qKey => {
+        const selected = document.querySelector(`input[name="q_${qKey.replace('-', '_')}"]:checked`);
+        if (!selected) {
+            answeredAll = false;
+        }
+    });
+
+    if (!answeredAll) {
+        alert('Please answer all 3 questions in this knowledge check before submitting.');
+        return;
+    }
+
+    // Evaluate each question
+    qKeys.forEach(qKey => {
+        const selected = document.querySelector(`input[name="q_${qKey.replace('-', '_')}"]:checked`);
+        const userChoice = selected ? selected.value : null;
+        const answerInfo = QUIZ_ANSWER_KEY[qKey];
+        const qBox = document.getElementById(`qbox-${qKey}`);
+        const fbBox = document.getElementById(`fb-${qKey}`);
+
+        // Reset feedback styles
+        qBox.classList.remove('is-correct', 'is-incorrect');
+        qBox.querySelectorAll('.quiz-option-label').forEach(lbl => {
+            lbl.classList.remove('correct-choice', 'wrong-choice');
+        });
+
+        // Mark correct option green
+        const correctLabel = qBox.querySelector(`input[value="${answerInfo.correct}"]`).closest('.quiz-option-label');
+        correctLabel.classList.add('correct-choice');
+
+        if (userChoice === answerInfo.correct) {
+            correctCount++;
+            qBox.classList.add('is-correct');
+            fbBox.className = 'feedback-box correct';
+            fbBox.style.display = 'block';
+            fbBox.innerHTML = `
+                <div class="feedback-title">Correct!</div>
+                <div>${answerInfo.explanation}</div>
+            `;
+        } else {
+            qBox.classList.add('is-incorrect');
+            const wrongLabel = qBox.querySelector(`input[value="${userChoice}"]`).closest('.quiz-option-label');
+            wrongLabel.classList.add('wrong-choice');
+            fbBox.className = 'feedback-box incorrect';
+            fbBox.style.display = 'block';
+            fbBox.innerHTML = `
+                <div class="feedback-title">Incorrect (You selected ${userChoice}, correct is ${answerInfo.correct})</div>
+                <div style="margin-bottom: 0.35rem;"><strong>Rationale:</strong> ${answerInfo.explanation}</div>
+                <div style="font-size: 0.875rem; color: #b91c1c;"><strong>Distractor details:</strong> ${answerInfo.wrongRationale}</div>
+            `;
+        }
+    });
+
+    const scoreIndicator = document.getElementById(`score-ind-${subtopicNum}`);
+    const passed = correctCount >= 2;
+
+    if (passed) {
+        scoreIndicator.textContent = `Passed: ${correctCount}/3 Score`;
+        scoreIndicator.className = 'quiz-score-indicator passed';
+
+        // Update progress state
+        progressState[`subtopic_${subtopicNum}`] = true;
+        progressState.scores[subtopicNum] = correctCount;
+        progressState.expanded[subtopicNum] = false; // collapse on finish so next subtopic is in view
+        saveProgress();
+        updateUIProgression();
+
+        // Trigger celebratory fireworks sparks and "Hoiyee!" audio
+        triggerCelebrationSparks(subtopicNum);
+
+        // Show banner alert
+        const alertBox = document.getElementById('celebration-alert');
+        const alertTitle = document.getElementById('celebration-title');
+        const alertSubtitle = document.getElementById('celebration-subtitle');
+        alertBox.style.display = 'block';
+        
+        if (subtopicNum === 3) {
+            alertTitle.textContent = 'Domain 1 Fully Mastered! Hoiyee!';
+            alertSubtitle.textContent = 'Outstanding achievement! You have completed all 3 subtopics of AZ-900 Domain 1.';
+            document.getElementById('celebration-next-btn').textContent = 'View Domain 1 Mastery Badge';
+        } else {
+            alertTitle.textContent = `Subtopic 1.${subtopicNum} Passed! Hoiyee!`;
+            alertSubtitle.textContent = `Score: ${correctCount}/3. Subtopic 1.${subtopicNum + 1} is now unlocked!`;
+            document.getElementById('celebration-next-btn').textContent = `Proceed to Subtopic 1.${subtopicNum + 1}`;
+        }
+
+        alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        scoreIndicator.textContent = `Score: ${correctCount}/3 (Need 2/3 to pass)`;
+        scoreIndicator.className = 'quiz-score-indicator failed';
+        alert(`You scored ${correctCount}/3. Review the explanations above and try again to unlock the next subtopic.`);
+    }
+}
+
+function continueToNextSubtopic() {
+    if (progressState.subtopic_2 && !progressState.subtopic_3) {
+        navigateToSubtopic(3);
+    } else if (progressState.subtopic_1 && !progressState.subtopic_2) {
+        navigateToSubtopic(2);
+    } else if (progressState.subtopic_3) {
+        document.getElementById('domain-mastery-panel').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// =========================================================================
+// CELEBRATION FIREWORKS SPARKS (31st December Style) & HOIYEE! AUDIO
+// =========================================================================
+function playHoiyeeAudio() {
+    // 1. Try playing audio element
+    const audio = document.getElementById('hoiyee-audio');
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(err => {
+            console.log('Audio file playback handled, utilizing Web Audio synthesizer fallback');
+            synthesizeHoiyeeCheer();
+        });
+    } else {
+        synthesizeHoiyeeCheer();
+    }
+}
+
+function testSound() {
+    playHoiyeeAudio();
+}
+
+// Web Audio API synthesizer for guaranteed zero-dependency vocal cheer + festive chimes
+function synthesizeHoiyeeCheer() {
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+            ctx.resume();
+        }
+
+        const now = ctx.currentTime;
+
+        // Fanfare chord (E major: E5, G#5, B5, E6)
+        const notes = [659.25, 830.61, 987.77, 1318.51];
+        notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+            gain.gain.setValueAtTime(0, now + idx * 0.08);
+            gain.gain.linearRampToValueAtTime(0.2, now + idx * 0.08 + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 1.2);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 1.3);
+        });
+
+        // Vocalized 'Hoiyee' formant sweep
+        const vocalOsc = ctx.createOscillator();
+        const vocalGain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        vocalOsc.type = 'sawtooth';
+        vocalOsc.frequency.setValueAtTime(260, now);
+        vocalOsc.frequency.exponentialRampToValueAtTime(580, now + 0.35);
+        vocalOsc.frequency.linearRampToValueAtTime(720, now + 0.8);
+        vocalOsc.frequency.exponentialRampToValueAtTime(440, now + 1.4);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(800, now);
+        filter.frequency.linearRampToValueAtTime(1400, now + 0.5);
+        filter.Q.value = 4.0;
+
+        vocalGain.gain.setValueAtTime(0, now);
+        vocalGain.gain.linearRampToValueAtTime(0.25, now + 0.1);
+        vocalGain.gain.linearRampToValueAtTime(0.3, now + 0.6);
+        vocalGain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+
+        vocalOsc.connect(filter);
+        filter.connect(vocalGain);
+        vocalGain.connect(ctx.destination);
+
+        vocalOsc.start(now);
+        vocalOsc.stop(now + 1.45);
+    } catch(e) {
+        console.warn('Web audio synth notice:', e);
+    }
+}
+
+// 31st December Midnight Style Fireworks Sparks Animation
+function triggerCelebrationSparks(subtopicNum) {
+    playHoiyeeAudio();
+
+    const canvas = document.getElementById('celebration-canvas');
+    if (!canvas) return;
+
+    canvas.style.display = 'block';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+
+    const particles = [];
+    const colors = [
+        '#f59e0b', '#fbbf24', '#10b981', '#34d399', 
+        '#0078d4', '#38bdf8', '#8b5cf6', '#ec4899', '#ffffff'
+    ];
+
+    // Spawn multiple rocket bursts
+    function spawnBurst(x, y, count = 100) {
+        for (let i = 0; i < count; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 9 + 2;
+            particles.push({
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                size: Math.random() * 3.5 + 1.5,
+                alpha: 1,
+                decay: Math.random() * 0.015 + 0.008,
+                gravity: 0.12
+            });
+        }
+    }
+
+    // Sequence of fireworks explosions across screen
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight * 0.4;
+
+    spawnBurst(cx, cy, 140);
+    setTimeout(() => spawnBurst(cx - 260, cy + 50, 100), 300);
+    setTimeout(() => spawnBurst(cx + 260, cy - 40, 110), 600);
+    setTimeout(() => spawnBurst(cx - 120, cy - 100, 120), 1000);
+    setTimeout(() => spawnBurst(cx + 140, cy + 80, 130), 1400);
+
+    let animationId;
+    const startTime = Date.now();
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.vx *= 0.98;
+            p.alpha -= p.decay;
+
+            if (p.alpha <= 0) {
+                particles.splice(i, 1);
+                continue;
+            }
+
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        if (Date.now() - startTime < 4500 || particles.length > 0) {
+            animationId = requestAnimationFrame(render);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.display = 'none';
+            cancelAnimationFrame(animationId);
+        }
+    }
+
+    render();
+}
+
+// =========================================================================
+// AI STUDY BUDDY CHAT LOGIC
+// =========================================================================
+let isChatOpen = false;
+
+function toggleChatPanel() {
+    isChatOpen = !isChatOpen;
+    const drawer = document.getElementById('ai-chat-drawer');
+    const overlay = document.getElementById('ai-chat-overlay');
+    const fab = document.getElementById('ai-chat-fab');
+
+    if (isChatOpen) {
+        drawer.classList.add('open');
+        overlay.classList.add('active');
+        fab.style.transform = 'scale(0.85)';
+        setTimeout(() => {
+            const input = document.getElementById('drawer-chat-input');
+            if (input) input.focus();
+        }, 300);
+    } else {
+        drawer.classList.remove('open');
+        overlay.classList.remove('active');
+        fab.style.transform = '';
+    }
+}
+
+function getActiveSubtopicName() {
+    if (progressState.subtopic_3) {
+        return 'Domain 1 Review & Exam Prep';
+    } else if (progressState.subtopic_2) {
+        return 'Subtopic 1.3: Cloud Service Types';
+    } else if (progressState.subtopic_1) {
+        return 'Subtopic 1.2: Benefits of Cloud Services';
+    } else {
+        return 'Subtopic 1.1: Describe Cloud Computing';
+    }
+}
+
+function updateChatContext() {
+    const tag = document.getElementById('chat-active-subtopic-tag');
+    if (tag) {
+        tag.textContent = 'Focus: ' + getActiveSubtopicName();
+    }
+}
+
+function appendChatBubble(content, sender = 'ai') {
+    const container = document.getElementById('chat-messages-container');
+    if (!container) return;
+
+    // Hide suggestions after conversation starts
+    const suggestions = document.getElementById('chat-suggestions');
+    if (suggestions && sender === 'user') {
+        suggestions.style.display = 'none';
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${sender}`;
+
+    if (sender === 'ai') {
+        bubble.innerHTML = `
+            <div class="bubble-sender">AI Study Buddy</div>
+            <div class="bubble-text">${content}</div>
+        `;
+    } else {
+        bubble.innerHTML = `
+            <div class="bubble-text">${escapeHtml(content)}</div>
+        `;
+    }
+
+    container.appendChild(bubble);
+    container.scrollTop = container.scrollHeight;
+    return bubble;
+}
+
+function showTypingIndicator() {
+    const container = document.getElementById('chat-messages-container');
+    if (!container) return null;
+
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'chat-typing-indicator';
+    typingDiv.className = 'chat-bubble ai';
+    typingDiv.innerHTML = `
+        <div class="bubble-sender">AI Study Buddy</div>
+        <div class="typing-indicator">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+        </div>
+    `;
+    container.appendChild(typingDiv);
+    container.scrollTop = container.scrollHeight;
+    return typingDiv;
+}
+
+function removeTypingIndicator() {
+    const typing = document.getElementById('chat-typing-indicator');
+    if (typing) typing.remove();
+}
+
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+function askSuggested(questionText) {
+    const input = document.getElementById('drawer-chat-input');
+    if (input) {
+        input.value = questionText;
+        handleSendChat(new Event('submit'));
+    }
+}
+
+async function handleSendChat(event) {
+    if (event) event.preventDefault();
+
+    const input = document.getElementById('drawer-chat-input');
+    const sendBtn = document.getElementById('drawer-send-btn');
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    // Append user message
+    appendChatBubble(message, 'user');
+    input.value = '';
+    input.disabled = true;
+    sendBtn.disabled = true;
+
+    const typing = showTypingIndicator();
+    const currentSubtopic = getActiveSubtopicName();
+
+    try {
+        const response = await fetch('/api/az900/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: message,
+                subtopic_context: currentSubtopic
+            })
+        });
+
+        const data = await response.json();
+        removeTypingIndicator();
+
+        if (data.success) {
+            appendChatBubble(data.reply, 'ai');
+        } else {
+            appendChatBubble(data.reply || 'Sorry, I encountered an error. Please try again.', 'ai');
+        }
+    } catch(err) {
+        console.error('Chat error:', err);
+        removeTypingIndicator();
+        appendChatBubble('Connection error. Please verify your internet or server status.', 'ai');
+    } finally {
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.focus();
+    }
+}
+</script>
+{% endblock %}

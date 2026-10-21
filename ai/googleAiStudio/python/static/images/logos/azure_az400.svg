@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+    <defs>
+        <linearGradient id="az400Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#005BA1"/>
+            <stop offset="100%" stop-color="#001830"/>
+        </linearGradient>
+        <linearGradient id="infinityGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#50E6FF"/>
+            <stop offset="100%" stop-color="#0078D4"/>
+        </linearGradient>
+        <filter id="az400Glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#005BA1" flood-opacity="0.35"/>
+        </filter>
+    </defs>
+    
+    <!-- Outer Hexagon Badge -->
+    <polygon points="120,12 216,66 216,174 120,228 24,174 24,66" fill="url(#az400Grad)" stroke="#50E6FF" stroke-width="3" filter="url(#az400Glow)"/>
+    <polygon points="120,22 206,71 206,169 120,218 34,169 34,71" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.4"/>
+    
+    <!-- Microsoft Logo 4 Squares at Top -->
+    <g transform="translate(111, 38)">
+        <rect x="0" y="0" width="8" height="8" fill="#F25022"/>
+        <rect x="10" y="0" width="8" height="8" fill="#7FBA00"/>
+        <rect x="0" y="10" width="8" height="8" fill="#00A4EF"/>
+        <rect x="10" y="10" width="8" height="8" fill="#FFB900"/>
+    </g>
+    
+    <!-- Microsoft Certified Header -->
+    <text x="120" y="70" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="11" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">MICROSOFT CERTIFIED</text>
+    
+    <!-- DevOps Infinity Loop Glyph -->
+    <g transform="translate(75, 84)">
+        <path d="M22,18 C14,18 8,24 8,30 C8,36 14,42 22,42 C32,42 42,30 48,24 C54,18 64,18 70,18 C78,18 84,24 84,30 C84,36 78,42 70,42 C60,42 50,30 44,24 C38,18 28,18 22,18 Z" fill="none" stroke="url(#infinityGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    
+    <!-- Certification Banner -->
+    <rect x="38" y="142" width="164" height="32" rx="6" fill="#001833" stroke="#50E6FF" stroke-width="1.5"/>
+    <text x="120" y="157" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="12" fill="#50E6FF" text-anchor="middle" letter-spacing="1">DEVOPS ENGINEER</text>
+    <text x="120" y="169" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="9" fill="#FFD700" text-anchor="middle" letter-spacing="1.5">EXPERT ★★★</text>
+    
+    <!-- AZ-400 Code Badge -->
+    <rect x="75" y="186" width="90" height="20" rx="10" fill="#0078D4"/>
+    <text x="120" y="200" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="11" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">AZ-400</text>
+</svg>

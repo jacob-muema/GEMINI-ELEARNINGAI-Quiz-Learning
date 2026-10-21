@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+    <defs>
+        <linearGradient id="ciscoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1A365D"/>
+            <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+        <linearGradient id="ciscoCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38BDF8"/>
+            <stop offset="100%" stop-color="#0284C7"/>
+        </linearGradient>
+        <filter id="ciscoGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0284C7" flood-opacity="0.35"/>
+        </filter>
+    </defs>
+    
+    <!-- Outer Shield / Hexagon -->
+    <polygon points="120,12 216,66 216,174 120,228 24,174 24,66" fill="url(#ciscoBg)" stroke="#38BDF8" stroke-width="3" filter="url(#ciscoGlow)"/>
+    <polygon points="120,22 206,71 206,169 120,218 34,169 34,71" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.3"/>
+    
+    <!-- Cisco Bridge Sound-Bars -->
+    <g transform="translate(68, 48)">
+        <rect x="0" y="22" width="6" height="14" rx="3" fill="#38BDF8"/>
+        <rect x="12" y="14" width="6" height="22" rx="3" fill="#38BDF8"/>
+        <rect x="24" y="6" width="6" height="30" rx="3" fill="#38BDF8"/>
+        <rect x="36" y="14" width="6" height="22" rx="3" fill="#38BDF8"/>
+        <rect x="48" y="22" width="6" height="14" rx="3" fill="#38BDF8"/>
+        
+        <rect x="60" y="22" width="6" height="14" rx="3" fill="#38BDF8"/>
+        <rect x="72" y="14" width="6" height="22" rx="3" fill="#38BDF8"/>
+        <rect x="84" y="6" width="6" height="30" rx="3" fill="#38BDF8"/>
+        <rect x="96" y="14" width="6" height="22" rx="3" fill="#38BDF8"/>
+        <rect x="108" y="22" width="6" height="14" rx="3" fill="#38BDF8"/>
+    </g>
+    
+    <!-- CISCO Wordmark -->
+    <text x="120" y="104" font-family="'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">CISCO</text>
+    
+    <!-- Certification Banner -->
+    <rect x="42" y="126" width="156" height="46" rx="6" fill="#0B132B" stroke="#38BDF8" stroke-width="1.5"/>
+    <text x="120" y="147" font-family="'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#38BDF8" text-anchor="middle" letter-spacing="2">CCNA</text>
+    <text x="120" y="163" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="9" fill="#94A3B8" text-anchor="middle" letter-spacing="1">CERTIFIED NETWORK ASSOCIATE</text>
+    
+    <!-- 200-301 Code Badge -->
+    <rect x="75" y="186" width="90" height="20" rx="10" fill="#0284C7"/>
+    <text x="120" y="200" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="11" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">200-301</text>
+</svg>

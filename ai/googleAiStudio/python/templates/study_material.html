@@ -9,9 +9,21 @@
     </a>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h1 class="card-title">📚 Study Material: {{ topic.name }}</h1>
+<div class="card" style="position: relative; overflow: hidden;">
+    {% if topic.vendor_logo %}
+    <img src="{{ topic.vendor_logo }}" alt="Official vendor watermark" style="position: absolute; right: -25px; top: -15px; width: 180px; height: 180px; opacity: 0.06; pointer-events: none; z-index: 0; object-fit: contain;">
+    {% endif %}
+    
+    <div class="card-header" style="display: flex; align-items: center; gap: 1.25rem; position: relative; z-index: 1;">
+        {% if topic.logo %}
+        <div style="width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 1rem; padding: 0.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--color-gray-200); flex-shrink: 0;">
+            <img src="{{ topic.logo }}" alt="{{ topic.name }} official logo" style="max-height: 65px; max-width: 65px; object-fit: contain;">
+        </div>
+        {% endif %}
+        <div>
+            <span style="background: var(--color-gray-900); color: white; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 0.4rem; letter-spacing: 0.5px;">{{ topic.code }} BLUEPRINT</span>
+            <h1 class="card-title" style="margin: 0.35rem 0 0 0; font-size: 1.75rem;">Study Guide: {{ topic.name }}</h1>
+        </div>
     </div>
     
     <div style="line-height: 1.8; color: var(--color-gray-700);">

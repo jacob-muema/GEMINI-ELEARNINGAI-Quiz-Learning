@@ -10,25 +10,47 @@
 </div>
 
 <div class="grid grid-2">
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title">{{ topic.name }}</h1>
+    <div class="card" style="position: relative; overflow: hidden;">
+        {% if topic.vendor_logo %}
+        <img src="{{ topic.vendor_logo }}" alt="Official vendor watermark" style="position: absolute; right: -25px; top: -15px; width: 140px; height: 140px; opacity: 0.08; pointer-events: none; z-index: 0; object-fit: contain;">
+        {% endif %}
+        
+        <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; position: relative; z-index: 1;">
+            {% if topic.logo %}
+            <div style="width: 85px; height: 85px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 1rem; padding: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--color-gray-200); flex-shrink: 0;">
+                <img src="{{ topic.logo }}" alt="{{ topic.name }} official logo" style="max-height: 75px; max-width: 75px; object-fit: contain;">
+            </div>
+            {% endif %}
+            <div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem;">
+                    <span style="background: var(--color-gray-900); color: white; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 0.4rem; letter-spacing: 0.5px;">{{ topic.code }}</span>
+                    <span style="background-color: var(--color-gray-100); padding: 0.2rem 0.6rem; border-radius: 0.4rem; font-size: 0.75rem; color: var(--color-gray-700); font-weight: 600;">
+                        {{ topic.difficulty }}
+                    </span>
+                </div>
+                <h1 class="card-title" style="margin: 0; font-size: 1.5rem;">{{ topic.name }}</h1>
+            </div>
         </div>
-        <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+
+        <p style="color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.6; position: relative; z-index: 1;">
             {{ topic.description }}
         </p>
-        <div style="margin-bottom: 1.5rem;">
-            <span style="background-color: var(--color-gray-100); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; color: var(--color-gray-700);">
-                {{ topic.difficulty }}
-            </span>
-        </div>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; position: relative; z-index: 1;">
+            {% if topic_id == 'az900' %}
+            <a href="{{ url_for('az900_domain1') }}" class="btn" style="background: linear-gradient(135deg, #0078d4, #005a9e); color: white; text-decoration: none; font-weight: 700; border-radius: 0.5rem; padding: 0.75rem 1.4rem; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);">
+                <span>Start Your Journey (Domain 1)</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            {% endif %}
             <a href="{{ url_for('generate_quiz', topic_id=topic_id) }}" class="btn btn-primary">
-                🎯 Take Quiz
+                Practice Exam
             </a>
+            {% if topic_id != 'az900' %}
             <a href="{{ url_for('study_material', topic_id=topic_id) }}" class="btn btn-secondary">
-                📚 Study Material
+                Study Guide
             </a>
+            {% endif %}
         </div>
     </div>
 
