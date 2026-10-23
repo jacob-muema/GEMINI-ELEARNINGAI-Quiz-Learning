@@ -3,7 +3,17 @@ import json
 from datetime import datetime
 import mysql.connector as mysql_connector
 
-# MySQL connection parameters – loaded from .env by app.py before this module runs
+# Load .env file from the same directory as this script
+_env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+if os.path.exists(_env_file):
+    with open(_env_file) as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith('#') and '=' in _line:
+                _k, _v = _line.split('=', 1)
+                os.environ.setdefault(_k.strip(), _v.strip())
+
+# MySQL connection parameters
 MYSQL_HOST     = os.getenv('MYSQL_HOST', 'localhost')
 MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'elitorsa_jm')
 MYSQL_USER     = os.getenv('MYSQL_USER', 'elitorsa_jm')
