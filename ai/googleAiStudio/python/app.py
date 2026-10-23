@@ -40,6 +40,10 @@ def login_required(f):
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Change this to a secure secret key
 
+# Fix url_for() generating https:// correctly behind cPanel/Passenger proxy
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
 # Initialize persistent SQLite database
 init_db()
 
