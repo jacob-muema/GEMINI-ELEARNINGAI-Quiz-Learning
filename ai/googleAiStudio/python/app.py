@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, redirect, url_for, session, j
 import google.generativeai as genai
 import json
 import os
-import sqlite3
 import requests
 import secrets
 import urllib.parse
@@ -10,7 +9,7 @@ from datetime import datetime
 import uuid
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
-from database import get_db, init_db
+from database import get_db, init_db, dict_cursor
 from functools import wraps
 
 # Load .env file automatically if present
@@ -145,17 +144,17 @@ def initialize_user_data(user_id):
         db_user_id = session['logged_in_user']['id']
         try:
             conn = get_db()
-            cursor = conn.cursor()
+            cursor = dict_cursor(conn)
             
             # Load AZ-900 module progress
-            cursor.execute("SELECT progress_data FROM user_progress WHERE user_id = ? AND topic_id = 'az900'", (db_user_id,))
+            cursor.execute("SELECT progress_data FROM user_progress WHERE user_id = %s AND topic_id = 'az900'", (db_user_id,))
             row = cursor.fetchone()
             if row:
                 users_data[user_id]['az900_progress'] = json.loads(row['progress_data'])
                 session['az900_progress'] = users_data[user_id]['az900_progress']
             
             # Load quiz history
-            cursor.execute("SELECT * FROM quiz_history WHERE user_id = ? ORDER BY created_at ASC", (db_user_id,))
+            cursor.execute("SELECT * FROM quiz_history WHERE user_id = %s ORDER BY created_at ASC", (db_user_id,))
             db_quizzes = cursor.fetchall()
             if db_quizzes and not users_data[user_id]['quiz_history']:
                 for q in db_quizzes:
@@ -220,9 +219,9 @@ def register():
 
         try:
             conn = get_db()
-            cursor = conn.cursor()
+            cursor = dict_cursor(conn)
             cursor.execute(
-                "INSERT INTO users (username, email, password_hash, display_name, accepted_terms, terms_accepted_at) VALUES (?, ?, ?, ?, 1, CURRENT_TIMESTAMP)",
+                "INSERT INTO users (username, email, password_hash, display_name, accepted_terms, terms_accepted_at) VALUES (%s, %s, %s, %s, 1, CURRENT_TIMESTAMP)",
                 (username, email, password_hash, display_name)
             )
             user_id = cursor.lastrowid
@@ -234,13 +233,13 @@ def register():
                 guest_data = users_data[guest_user_id]
                 if 'az900_progress' in guest_data:
                     cursor.execute(
-                        "INSERT OR REPLACE INTO user_progress (user_id, topic_id, progress_data) VALUES (?, ?, ?)",
+                        "INSERT INTO user_progress (user_id, topic_id, progress_data) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE progress_data = VALUES(progress_data), updated_at = CURRENT_TIMESTAMP",
                         (user_id, 'az900', json.dumps(guest_data['az900_progress']))
                     )
                 for q in guest_data.get('quiz_history', []):
                     cursor.execute(
                         """INSERT INTO quiz_history (user_id, quiz_id, topic_id, topic_name, score, correct_answers, total_questions, results_json)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
                         (user_id, q['quiz_id'], q['topic_id'], q['topic_name'], q['score'], q['correct_answers'], q['total_questions'], json.dumps(q.get('results', [])))
                     )
                 conn.commit()
@@ -259,7 +258,7 @@ def register():
             if next_page and next_page.startswith('/') and not next_page.startswith('//'):
                 return redirect(next_page)
             return redirect(url_for('az900_domain1'))
-        except sqlite3.IntegrityError:
+        except Exception:
             return render_template("register.html", error="An account with this username or email already exists. Please sign in.", form_data=form_data, next=next_page, message=message)
         except Exception as e:
             return render_template("register.html", error=f"Registration failed: {str(e)}", form_data=form_data, next=next_page, message=message)
@@ -279,9 +278,9 @@ def login():
             return render_template("login.html", error="Please enter both username/email and password.", username=username, next=next_page, message=message)
 
         conn = get_db()
-        cursor = conn.cursor()
+        cursor = dict_cursor(conn)
         cursor.execute(
-            "SELECT * FROM users WHERE username = ? OR email = ?",
+            "SELECT * FROM users WHERE username = %s OR email = %s",
             (username, username.lower())
         )
         user = cursor.fetchone()
@@ -382,8 +381,8 @@ def google_callback():
         display_name = user_info.get("name") or email.split("@")[0]
 
         conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+        cursor = dict_cursor(conn)
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
         if not user:
@@ -391,7 +390,7 @@ def google_callback():
             username = base_username
             counter = 1
             while True:
-                cursor.execute("SELECT id FROM users WHERE username = ?", (username,))
+                cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
                 if not cursor.fetchone():
                     break
                 username = f"{base_username}_{counter}"
@@ -399,7 +398,7 @@ def google_callback():
 
             random_pw_hash = generate_password_hash(secrets.token_urlsafe(32))
             cursor.execute(
-                "INSERT INTO users (username, email, password_hash, display_name) VALUES (?, ?, ?, ?)",
+                "INSERT INTO users (username, email, password_hash, display_name) VALUES (%s, %s, %s, %s)",
                 (username, email, random_pw_hash, display_name)
             )
             user_id = cursor.lastrowid
@@ -1042,10 +1041,10 @@ def submit_quiz():
     if 'logged_in_user' in session:
         try:
             conn = get_db()
-            cursor = conn.cursor()
+            cursor = dict_cursor(conn)
             cursor.execute(
                 """INSERT INTO quiz_history (user_id, quiz_id, topic_id, topic_name, score, correct_answers, total_questions, results_json)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
                 (session['logged_in_user']['id'], quiz['id'], topic_id, quiz['topic_name'], score, correct_count, len(quiz['questions']), json.dumps(results))
             )
             conn.commit()
@@ -1287,9 +1286,9 @@ def az900_progress_api():
         if 'logged_in_user' in session:
             try:
                 conn = get_db()
-                cursor = conn.cursor()
+                cursor = dict_cursor(conn)
                 cursor.execute(
-                    "INSERT OR REPLACE INTO user_progress (user_id, topic_id, progress_data) VALUES (?, ?, ?)",
+                    "INSERT INTO user_progress (user_id, topic_id, progress_data) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE progress_data = VALUES(progress_data), updated_at = CURRENT_TIMESTAMP",
                     (session['logged_in_user']['id'], 'az900', json.dumps(users_data[user_id]['az900_progress']))
                 )
                 conn.commit()
