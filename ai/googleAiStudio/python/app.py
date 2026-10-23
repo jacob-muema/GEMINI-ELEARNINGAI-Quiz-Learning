@@ -212,12 +212,17 @@ def register():
             return render_template("register.html", error="Passwords do not match. Please verify both passwords.", form_data=form_data, next=next_page, message=message)
 
         password_hash = generate_password_hash(password)
+        accept_terms = request.form.get("accept_terms")
+        accept_disclaimer = request.form.get("accept_disclaimer")
+
+        if not accept_terms or not accept_disclaimer:
+            return render_template("register.html", error="You must agree to the Terms & Privacy Policy and acknowledge the educational purpose disclaimer.", form_data=form_data, next=next_page, message=message)
 
         try:
             conn = get_db()
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO users (username, email, password_hash, display_name) VALUES (?, ?, ?, ?)",
+                "INSERT INTO users (username, email, password_hash, display_name, accepted_terms, terms_accepted_at) VALUES (?, ?, ?, ?, 1, CURRENT_TIMESTAMP)",
                 (username, email, password_hash, display_name)
             )
             user_id = cursor.lastrowid
@@ -425,6 +430,12 @@ def google_callback():
 @app.route("/")
 def index():
     return render_template("index.html", topics=topics_data)
+
+@app.route("/privacy")
+@app.route("/terms")
+@app.route("/privacy-terms")
+def privacy_terms():
+    return render_template("privacy_terms.html")
 
 @app.route("/ask_ai", methods=["POST"])
 def ask_ai():

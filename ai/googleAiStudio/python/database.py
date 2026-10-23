@@ -22,9 +22,21 @@ def init_db():
         email TEXT UNIQUE NOT NULL,
         password_hash TEXT NOT NULL,
         display_name TEXT,
+        accepted_terms INTEGER DEFAULT 1,
+        terms_accepted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
+
+    # Migration for existing databases
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN accepted_terms INTEGER DEFAULT 1")
+    except Exception:
+        pass
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN terms_accepted_at TIMESTAMP")
+    except Exception:
+        pass
     
     # Progress table (stores JSON progress per topic/course)
     cursor.execute('''

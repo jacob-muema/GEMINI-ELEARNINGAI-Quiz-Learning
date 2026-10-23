@@ -16,6 +16,8 @@ __pycache__/
 # Local files
 *.mp4
 *.pdf
+canva_pitch_deck*
+*pitch_deck*
 
 # Local folders
 *chrom*_*/ 

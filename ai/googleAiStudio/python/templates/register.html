@@ -223,6 +223,43 @@
                 <span class="chip" id="req-special">• Special char</span>
             </div>
 
+            <!-- Terms & Privacy Checkboxes -->
+            <div class="legal-checkbox-group">
+                <label class="custom-checkbox-container" for="accept_terms">
+                    <input type="checkbox" id="accept_terms" name="accept_terms" value="yes" required>
+                    <span class="custom-checkmark"></span>
+                    <span class="checkbox-text">
+                        I agree to the <a href="{{ url_for('privacy_terms') }}" target="_blank" class="auth-legal-link">Terms of Service</a> &amp; <a href="{{ url_for('privacy_terms') }}" target="_blank" class="auth-legal-link">Privacy Policy</a> (including collection of username, email, and learning progress).
+                    </span>
+                </label>
+
+                <label class="custom-checkbox-container" for="accept_disclaimer">
+                    <input type="checkbox" id="accept_disclaimer" name="accept_disclaimer" value="yes" required>
+                    <span class="custom-checkmark"></span>
+                    <span class="checkbox-text">
+                        <strong>Educational Purpose:</strong> I understand this is an independent study tool and is <span class="not-ms-highlight">NOT a Microsoft product</span>, nor affiliated with Microsoft Corporation.
+                    </span>
+                </label>
+
+                <!-- Collapsible Quick Summary -->
+                <details class="legal-quick-summary">
+                    <summary class="summary-toggle">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>What information is collected? (Click to view)</span>
+                    </summary>
+                    <div class="summary-details-box">
+                        <p><strong>Information Collected:</strong> Username, email, password hash, and quiz/learning progress to track your certification preparation.</p>
+                        <p><strong>Privacy Guarantee:</strong> We never sell your data or use commercial ads. Data is encrypted and securely stored.</p>
+                        <p><strong>Disclaimer:</strong> This website is an independent study aid and is not sponsored or endorsed by Microsoft.</p>
+                        <p><a href="{{ url_for('privacy_terms') }}" target="_blank" class="auth-legal-link">Read Full Privacy &amp; Terms &rarr;</a></p>
+                    </div>
+                </details>
+            </div>
+
             <!-- Submit Button -->
             <button type="submit" class="auth-btn" id="submit-btn">
                 <span>Create Free Account & Start Learning</span>
@@ -513,6 +550,101 @@
     color: #dc2626;
 }
 
+/* Legal Checkboxes & Summary */
+.legal-checkbox-group {
+    background: #f8fafc;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.65rem;
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.custom-checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--color-gray-700);
+    line-height: 1.35;
+    user-select: none;
+    position: relative;
+}
+
+.custom-checkbox-container input[type="checkbox"] {
+    margin-top: 0.15rem;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.checkbox-text {
+    flex: 1;
+}
+
+.not-ms-highlight {
+    color: #b45309;
+    font-weight: 700;
+    background: #fef3c7;
+    padding: 0.05rem 0.35rem;
+    border-radius: 0.25rem;
+}
+
+.auth-legal-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.auth-legal-link:hover {
+    color: var(--color-primary-dark);
+}
+
+.legal-quick-summary {
+    border-top: 1px dashed var(--color-gray-200);
+    padding-top: 0.5rem;
+    margin-top: 0.2rem;
+}
+
+.summary-toggle {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--color-gray-600);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    user-select: none;
+}
+
+.summary-toggle:hover {
+    color: var(--color-primary);
+}
+
+.summary-details-box {
+    margin-top: 0.5rem;
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.45rem;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.76rem;
+    color: var(--color-gray-600);
+    line-height: 1.4;
+}
+
+.summary-details-box p {
+    margin: 0 0 0.35rem 0;
+}
+
+.summary-details-box p:last-child {
+    margin-bottom: 0;
+}
+
 /* Submit Button */
 .auth-btn {
     width: 100%;
@@ -692,6 +824,23 @@ document.getElementById('signup-form').addEventListener('submit', function(e) {
         e.preventDefault();
         alert('Password must be at least 6 characters long.');
         pwInput.focus();
+        return false;
+    }
+
+    const acceptTerms = document.getElementById('accept_terms');
+    const acceptDisclaimer = document.getElementById('accept_disclaimer');
+
+    if (!acceptTerms.checked) {
+        e.preventDefault();
+        alert('Please check the box to accept the Terms of Service and Privacy Policy.');
+        acceptTerms.focus();
+        return false;
+    }
+
+    if (!acceptDisclaimer.checked) {
+        e.preventDefault();
+        alert('Please acknowledge that this platform is for educational purposes and is not a Microsoft product.');
+        acceptDisclaimer.focus();
         return false;
     }
 

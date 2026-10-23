@@ -1,0 +1,717 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy & Terms of Service - IT Certification Hub{% endblock %}
+
+{% block content %}
+<div class="legal-page-container">
+    <!-- Breadcrumb / Back button -->
+    <div class="legal-navigation">
+        <a href="{{ url_for('index') }}" class="back-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Home</span>
+        </a>
+        <span class="last-updated">Last Updated: October 2026</span>
+    </div>
+
+    <!-- Header Banner -->
+    <div class="legal-header-card">
+        <div class="legal-header-badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+        </div>
+        <div>
+            <h1 class="legal-title">Privacy Policy & Terms of Service</h1>
+            <p class="legal-subtitle">Transparency regarding data collection, educational usage, and platform disclaimers.</p>
+        </div>
+    </div>
+
+    <!-- CRITICAL DISCLAIMER CALLOUT: NOT A MICROSOFT PRODUCT -->
+    <div class="disclaimer-callout-card" id="educational-disclaimer">
+        <div class="disclaimer-callout-header">
+            <div class="disclaimer-icon-badge">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <div>
+                <h2 class="disclaimer-title">IMPORTANT DISCLAIMER: NOT A MICROSOFT PRODUCT</h2>
+                <p class="disclaimer-subtitle">Solely for independent educational and certification preparation purposes</p>
+            </div>
+        </div>
+        <div class="disclaimer-body">
+            <p>
+                <strong>This platform is strictly an independent educational and study project. It is NOT a Microsoft product, and it is NOT developed, sponsored, endorsed, certified, or affiliated with Microsoft Corporation in any way.</strong>
+            </p>
+            <p>
+                All certification names, vendor names, and trademarks—including but not limited to <em>Microsoft&reg;</em>, <em>Microsoft Azure&reg;</em>, <em>AZ-900</em>, <em>AZ-400</em>, <em>AWS&reg;</em>, <em>CompTIA&reg;</em>, <em>Cisco&reg;</em>, and <em>ITIL&reg;</em>—are the property of their respective owners. Their reference on this website is exclusively for nominative, educational, and descriptive purposes to assist students in preparing for industry certification examinations.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div class="legal-grid">
+        <!-- Table of Contents / Sidebar -->
+        <aside class="legal-sidebar">
+            <div class="sidebar-sticky-card">
+                <h3 class="sidebar-title">Table of Contents</h3>
+                <nav class="sidebar-nav">
+                    <a href="#disclaimer" class="sidebar-nav-item active">1. Educational Disclaimer</a>
+                    <a href="#information-collected" class="sidebar-nav-item">2. Information We Collect</a>
+                    <a href="#how-we-use-data" class="sidebar-nav-item">3. How Information Is Used</a>
+                    <a href="#data-storage-security" class="sidebar-nav-item">4. Data Security & Storage</a>
+                    <a href="#cookies-sessions" class="sidebar-nav-item">5. Cookies & Session State</a>
+                    <a href="#terms-of-service" class="sidebar-nav-item">6. Terms of Service & Fair Use</a>
+                    <a href="#user-rights" class="sidebar-nav-item">7. Your Rights & Data Control</a>
+                    <a href="#contact" class="sidebar-nav-item">8. Contact Information</a>
+                </nav>
+                <div class="sidebar-cta">
+                    <p>Have questions about your data?</p>
+                    <a href="{{ url_for('register') }}" class="sidebar-btn">Sign Up to Learn</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Detailed Legal Sections -->
+        <div class="legal-content">
+            <!-- Section 1 -->
+            <section id="disclaimer" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">01</span>
+                    <h2>Educational Purpose & Third-Party Disclaimer</h2>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The IT Certification Hub & AI Quiz Learning platform is committed to democratizing access to quality cloud and cybersecurity education. 
+                    </p>
+                    <ul class="bullet-list">
+                        <li>
+                            <strong>Independent Educational Initiative:</strong> All study guides, practice questions, AI explanations, and progress metrics provided across AZ-900, AZ-400, AWS Solutions Architect, CompTIA Security+, and other domains are created solely for independent training.
+                        </li>
+                        <li>
+                            <strong>No Official Endorsement:</strong> Neither Microsoft Corporation, Amazon Web Services Inc., CompTIA, Cisco Systems Inc., nor PeopleCert/AXELOS have reviewed, authorized, or sponsored any material presented on this site.
+                        </li>
+                        <li>
+                            <strong>Exam Prep Companion:</strong> Passing official certification exams requires direct hands-on practice and reviewing official documentation. This platform does not guarantee passing scores on any official vendor examination.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="information-collected" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">02</span>
+                    <h2>Information We Collect</h2>
+                </div>
+                <div class="section-body">
+                    <p>
+                        We collect only the minimum necessary information required to provide our learning services, authenticate user accounts, and preserve exam practice history:
+                    </p>
+
+                    <div class="info-data-table-wrapper">
+                        <table class="info-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Specific Data Points</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Account Credentials</strong></td>
+                                    <td>Username, Email Address, Display Name, and Salted/Hashed Password.</td>
+                                    <td>User account creation, authentication, secure login, and account recovery.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Google OAuth Profile (Optional)</strong></td>
+                                    <td>Full Name, Email Address, Google User ID, and Avatar URL (when using Google Sign-In).</td>
+                                    <td>One-click secure authentication without needing to store separate passwords.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Learning & Exam Progress</strong></td>
+                                    <td>Completed modules, AZ-900 domain checklist items, practice quiz attempts, selected answers, scores, and timestamps.</td>
+                                    <td>Tracking your learning trajectory, calculating domain readiness, and displaying dashboard analytics.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>AI Study Queries</strong></td>
+                                    <td>Questions submitted through the AI Study Buddy chat prompt.</td>
+                                    <td>Generating personalized explanations and instant clarifications using Gemini AI.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Technical & Session Logs</strong></td>
+                                    <td>IP address, browser type/version, timestamp of access, and session identifier cookies.</td>
+                                    <td>Security monitoring, brute-force prevention, and maintaining persistent login sessions.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="how-we-use-data" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">03</span>
+                    <h2>How We Use Your Information</h2>
+                </div>
+                <div class="section-body">
+                    <p>We treat your personal data with the highest standard of care and respect:</p>
+                    <div class="cards-duo">
+                        <div class="mini-feature-card">
+                            <div class="mini-card-icon green">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <h4>What We Do</h4>
+                            <ul>
+                                <li>Save your study progress across sessions and devices.</li>
+                                <li>Tailor interactive quiz reviews based on past answers.</li>
+                                <li>Generate instantaneous AI study tips for complex cloud topics.</li>
+                                <li>Protect accounts against unauthorized access and cyber threats.</li>
+                            </ul>
+                        </div>
+                        <div class="mini-feature-card">
+                            <div class="mini-card-icon red">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </div>
+                            <h4>What We NEVER Do</h4>
+                            <ul>
+                                <li>We never sell, trade, or rent your personal data to data brokers.</li>
+                                <li>We never display third-party tracking advertisements.</li>
+                                <li>We never store plain-text passwords on our servers.</li>
+                                <li>We never access your external personal Google account files.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="data-storage-security" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">04</span>
+                    <h2>Data Security & Cryptographic Storage</h2>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Security is central to our engineering architecture:
+                    </p>
+                    <ul class="bullet-list">
+                        <li>
+                            <strong>Password Hashing:</strong> All passwords are salted and hashed using industry-standard one-way cryptographic algorithms (PBKDF2/SHA-256 via Werkzeug). Passwords cannot be decrypted or viewed by platform administrators.
+                        </li>
+                        <li>
+                            <strong>Database Protection:</strong> User accounts, quiz performance histories, and study progress records are preserved in an encrypted, isolated local relational database.
+                        </li>
+                        <li>
+                            <strong>OAuth 2.0 Compliance:</strong> Google sign-in handshakes strictly adhere to Google's OpenID Connect protocols with cryptographic token verification.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="cookies-sessions" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">05</span>
+                    <h2>Cookies & Session Management</h2>
+                </div>
+                <div class="section-body">
+                    <p>
+                        We use minimal, strictly necessary HTTP cookies:
+                    </p>
+                    <ul class="bullet-list">
+                        <li>
+                            <strong>Session Cookie:</strong> Stores an encrypted session token to keep you authenticated between page refreshes and module transitions.
+                        </li>
+                        <li>
+                            <strong>No Tracking Cookies:</strong> We do not load advertising or cross-site tracking cookies.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="terms-of-service" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">06</span>
+                    <h2>Terms of Service & Code of Conduct</h2>
+                </div>
+                <div class="section-body">
+                    <p>By registering or using this platform, you agree to the following terms:</p>
+                    <ul class="bullet-list">
+                        <li>
+                            <strong>Authorized Educational Use:</strong> You may use the platform's quizzes, lessons, and AI tutors for your personal educational advancement. Automated scraping, reverse engineering, or redistributing materials without prior consent is prohibited.
+                        </li>
+                        <li>
+                            <strong>Account Integrity:</strong> You agree to provide accurate registration details and maintain the confidentiality of your login credentials.
+                        </li>
+                        <li>
+                            <strong>Responsible AI Interaction:</strong> You agree not to submit unlawful, harmful, offensive, or infringing prompts to the AI study assistant.
+                        </li>
+                        <li>
+                            <strong>As-Is Provision:</strong> All content is provided "as is" for training and educational review. We continually update questions according to current certification objectives, but recommend verifying topics with official vendor documentation.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="user-rights" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">07</span>
+                    <h2>Your Rights & Data Control</h2>
+                </div>
+                <div class="section-body">
+                    <p>
+                        You retain full control over your educational data. You have the right to:
+                    </p>
+                    <ul class="bullet-list">
+                        <li>Review your saved quiz history and topic completion metrics at any time via your <a href="{{ url_for('dashboard') }}" style="color: var(--color-primary); font-weight: 600;">Student Dashboard</a>.</li>
+                        <li>Request the complete deletion of your account and associated quiz performance records.</li>
+                        <li>Export a summary of your certification exam preparation progress.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="contact" class="legal-section-card">
+                <div class="section-icon-header">
+                    <span class="section-number">08</span>
+                    <h2>Contact & Privacy Inquiries</h2>
+                </div>
+                <div class="section-body">
+                    <p>
+                        For questions regarding this Privacy Policy, Terms of Service, or to request data deletion, please contact the education development team:
+                    </p>
+                    <div class="contact-box">
+                        <div class="contact-item">
+                            <span class="contact-label">Platform:</span>
+                            <span class="contact-val">IT Certification Hub & AI Quiz Learning</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Status:</span>
+                            <span class="contact-val">Independent Educational Project (Non-Microsoft)</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Inquiries:</span>
+                            <span class="contact-val"><a href="mailto:support@itcertificationhub.internal" style="color: var(--color-primary);">support@itcertificationhub.internal</a></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<style>
+.legal-page-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0.5rem 1rem 3rem 1rem;
+}
+
+.legal-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-size: 0.88rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s;
+}
+
+.back-link:hover {
+    color: var(--color-primary);
+}
+
+.last-updated {
+    color: var(--color-gray-500);
+    font-size: 0.82rem;
+}
+
+/* Header Card */
+.legal-header-card {
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    color: white;
+    border-radius: 1rem;
+    padding: 2rem 2.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 10px 25px -5px rgba(30, 27, 75, 0.25);
+    margin-bottom: 1.5rem;
+}
+
+.legal-header-badge {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a5b4fc;
+    flex-shrink: 0;
+}
+
+.legal-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.02em;
+}
+
+.legal-subtitle {
+    font-size: 0.98rem;
+    color: #c7d2fe;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* DISCLAIMER CALLOUT BOX: HIGHLIGHTED */
+.disclaimer-callout-card {
+    background: #fffbeb;
+    border: 2px solid #f59e0b;
+    border-radius: 0.85rem;
+    padding: 1.35rem 1.65rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.12);
+}
+
+.disclaimer-callout-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+}
+
+.disclaimer-icon-badge {
+    width: 38px;
+    height: 38px;
+    background: #fde68a;
+    color: #b45309;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.disclaimer-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #92400e;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.disclaimer-subtitle {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: #b45309;
+    margin: 0.15rem 0 0 0;
+}
+
+.disclaimer-body p {
+    color: #78350f;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+}
+
+.disclaimer-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* Legal Layout Grid */
+.legal-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+@media (max-width: 860px) {
+    .legal-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .legal-sidebar {
+        display: none;
+    }
+}
+
+/* Sidebar */
+.sidebar-sticky-card {
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    position: sticky;
+    top: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.sidebar-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.85rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.sidebar-nav-item {
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+    text-decoration: none;
+    padding: 0.4rem 0.65rem;
+    border-radius: 0.4rem;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.35;
+}
+
+.sidebar-nav-item:hover {
+    background: var(--color-gray-100);
+    color: var(--color-primary);
+}
+
+.sidebar-cta {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-gray-200);
+    text-align: center;
+}
+
+.sidebar-cta p {
+    font-size: 0.8rem;
+    color: var(--color-gray-500);
+    margin-bottom: 0.6rem;
+}
+
+.sidebar-btn {
+    display: block;
+    width: 100%;
+    padding: 0.55rem;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 0.45rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.sidebar-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+/* Section Cards */
+.legal-section-card {
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.85rem;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.section-icon-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.section-number {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    background: #eef2ff;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.4rem;
+    letter-spacing: 0.05em;
+}
+
+.section-icon-header h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.section-body {
+    color: var(--color-gray-700);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.bullet-list {
+    margin: 0.85rem 0;
+    padding-left: 1.35rem;
+}
+
+.bullet-list li {
+    margin-bottom: 0.65rem;
+}
+
+/* Info Table */
+.info-data-table-wrapper {
+    overflow-x: auto;
+    margin: 1.15rem 0;
+    border-radius: 0.55rem;
+    border: 1px solid var(--color-gray-200);
+}
+
+.info-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    text-align: left;
+}
+
+.info-data-table th {
+    background: var(--color-gray-100);
+    color: var(--color-gray-800);
+    padding: 0.75rem 0.95rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.info-data-table td {
+    padding: 0.75rem 0.95rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    vertical-align: top;
+    color: var(--color-gray-700);
+}
+
+.info-data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.info-data-table tr:hover {
+    background: #fafafa;
+}
+
+/* Cards Duo */
+.cards-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+    .cards-duo {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mini-feature-card {
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.65rem;
+    padding: 1.25rem;
+}
+
+.mini-card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.65rem;
+}
+
+.mini-card-icon.green {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.mini-card-icon.red {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.mini-feature-card h4 {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0 0 0.5rem 0;
+}
+
+.mini-feature-card ul {
+    margin: 0;
+    padding-left: 1.15rem;
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+    line-height: 1.45;
+}
+
+.mini-feature-card li {
+    margin-bottom: 0.4rem;
+}
+
+/* Contact Box */
+.contact-box {
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.6rem;
+    padding: 1rem 1.25rem;
+    margin-top: 0.85rem;
+}
+
+.contact-item {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.88rem;
+}
+
+.contact-item:last-child {
+    margin-bottom: 0;
+}
+
+.contact-label {
+    font-weight: 700;
+    color: var(--color-gray-800);
+    min-width: 100px;
+}
+
+.contact-val {
+    color: var(--color-gray-700);
+}
+</style>
+{% endblock %}
