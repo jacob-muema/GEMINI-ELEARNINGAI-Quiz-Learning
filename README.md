@@ -6,7 +6,7 @@ An interactive e-learning platform powered by Google's Gemini AI that offers qui
 
 Watch the complete demonstration of the AI E-Learning Platform:
 
-[![AI E-Learning Platform Demo](https://img.youtube.com/vi/gdsTxD2B_d0/maxresdefault.jpg)](https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ)
+[![AI E-Learning Platform Demo]([https://img.youtube.com/vi/gdsTxD2B_d0/maxresdefault.jpg)](https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ](https://youtu.be/nhikiJ3ZoRM))
 
 **🎬 [Watch on YouTube: Building an AI-Powered Learning Platform with Flask & Google Gemini](https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ)**
 
