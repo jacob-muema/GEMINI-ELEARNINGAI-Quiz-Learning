@@ -8,7 +8,7 @@ Watch the complete demonstration of the AI E-Learning Platform:
 
 [![AI E-Learning Platform Demo]([https://youtu.be/4iWeVTUDPeE))
 
-**🎬 [Watch on YouTube: Building an AI-Powered Learning Platform with Flask & Google Gemini](https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ)**
+**🎬 [Watch on YouTube: Building an AI-Powered Learning Platform with Flask & Google Gemini]([https://youtu.be/gdsTxD2B_d0?si=Gj8f4SbCOs7DjbYZ](https://youtu.be/4iWeVTUDPeE))**
 
 *This 3-minute demo shows all the key features including interactive quizzes, AI chat assistant, and progress tracking across all 5 topics.*
 
